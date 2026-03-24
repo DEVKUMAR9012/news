@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Daily News Digest - Modern News Portal</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📰</text></svg>">
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+  <nav class="navbar">
+    <div class="nav-container">
+      <div class="nav-left">
+        <div class="logo" onclick="window.location.href='index.html'" style="cursor:pointer;">Daily News Digest</div>
+        <ul class="nav-menu">
+          <!-- FIX: paths updated to pages/ subfolder -->
+          <li><a href="index.html" class="active">Home</a></li>
+          <li><a href="pages/category.html?cat=World">World</a></li>
+          <li><a href="pages/category.html?cat=Technology">Technology</a></li>
+          <li><a href="pages/category.html?cat=Sports">Sports</a></li>
+          <li><a href="pages/category.html?cat=Business">Business</a></li>
+          <li><a href="pages/category.html?cat=AI">AI</a></li>
+        </ul>
+      </div>
+      <div class="nav-right">
+        <div class="search-box">
+          <i class="fas fa-search"></i>
+          <input type="text" id="searchInput" placeholder="Search news...">
+        </div>
+        <button id="darkToggle" class="dark-toggle"><i class="fas fa-moon"></i></button>
+        <div class="hamburger" id="hamburgerBtn"><i class="fas fa-bars"></i></div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hamburger Dropdown -->
+  <div class="hamburger-dropdown" id="hamburgerDropdown">
+    <div class="dropdown-header">
+      <span>Quick Menu</span>
+      <i class="fas fa-times" id="closeDropdown"></i>
+    </div>
+    <ul class="dropdown-menu">
+      <!-- FIX: paths updated to pages/ subfolder -->
+      <li><a href="pages/signup.html"><i class="fas fa-user-plus"></i> 📍 Signup</a></li>
+      <li><a href="pages/contact.html"><i class="fas fa-envelope"></i> ✅ Contact</a></li>
+      <li><a href="pages/settings.html"><i class="fas fa-cog"></i> 🔗 Settings</a></li>
+      <li><a href="pages/help.html"><i class="fas fa-question-circle"></i> ❓ Help</a></li>
+    </ul>
+  </div>
+  <div class="dropdown-overlay" id="dropdownOverlay"></div>
+
+  <main class="container">
+    <section class="hero">
+      <div class="hero-card">
+        <img src="https://picsum.photos/id/1043/1200/600" alt="hero">
+        <div class="hero-overlay">
+          <h1>The future of AI: how large language models reshape our world</h1>
+          <p>Exclusive report on the next generation of generative intelligence</p>
+        </div>
+      </div>
+    </section>
+
+    <div class="breaking-ticker">
+      <div class="ticker-container">
+        <span class="ticker-label"><i class="fas fa-bolt"></i> BREAKING</span>
+        <div class="ticker-wrapper">
+          <div class="ticker-content" id="tickerContent"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="content-grid">
+      <section class="news-grid" id="newsGrid"></section>
+      <aside class="sidebar">
+        <div class="sidebar-widget">
+          <h3>🔥 Trending Now</h3>
+          <ul class="trending-list" id="trendingList"></ul>
+        </div>
+        <div class="sidebar-widget">
+          <h3>🏷️ Popular Tags</h3>
+          <div class="tags">
+            <span>#AI</span>
+            <span>#Tech</span>
+            <span>#Business</span>
+            <span>#Sports</span>
+            <span>#World</span>
+          </div>
+        </div>
+        <div class="sidebar-widget newsletter">
+          <h3>📬 Newsletter</h3>
+          <p>Get top stories in your inbox</p>
+          <form id="newsletterForm">
+            <input type="email" placeholder="Your email" required>
+            <button type="submit">Subscribe</button>
+          </form>
+        </div>
+        <div class="sidebar-widget">
+          <h3>🔖 Bookmarks</h3>
+          <ul id="bookmarkList"></ul>
+        </div>
+      </aside>
+    </div>
+  </main>
+
+  <footer>
+    <p>© 2026 Daily News Digest. All rights reserved.</p>
+    <div class="footer-links">
+      <a href="#">Privacy Policy</a>
+      <a href="#">Terms of Service</a>
+      <a href="#">Advertise</a>
+    </div>
+  </footer>
+
+  <script src="assets/js/script.js"></script>
+</body>
+</html>

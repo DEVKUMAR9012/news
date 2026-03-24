@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin · Daily News Digest</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <link rel="stylesheet" href="../assets/css/style.css">
+  <style>
+    .admin-container { max-width:1000px; margin:3rem auto; }
+    .admin-header { text-align:center; margin-bottom:3rem; }
+    .admin-header h1 { font-size:2.5rem; background:linear-gradient(135deg,#0066ff,#a855f7); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent; }
+    .stats-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(200px,1fr)); gap:1.5rem; margin-bottom:3rem; }
+    .stat-card { background:var(--card-bg); border:1px solid var(--border); border-radius:20px; padding:1.5rem; text-align:center; transition:all 0.3s; }
+    .stat-card:hover { transform:translateY(-5px); box-shadow:0 10px 30px var(--accent-glow); }
+    .stat-card i { font-size:2rem; color:var(--accent); margin-bottom:0.5rem; }
+    .stat-card .number { font-size:2rem; font-weight:700; }
+    .stat-card .label { opacity:0.7; font-size:0.9rem; }
+    .admin-section { background:var(--card-bg); border:1px solid var(--border); border-radius:24px; padding:2rem; margin-bottom:2rem; }
+    .admin-section h2 { margin-bottom:1.5rem; display:flex; align-items:center; gap:0.5rem; }
+    .article-row { display:flex; justify-content:space-between; align-items:center; padding:1rem 0; border-bottom:1px solid var(--border); }
+    .article-row:last-child { border-bottom:none; }
+    .article-row .info { flex:1; }
+    .article-row .category-badge { padding:0.3rem 0.8rem; border-radius:20px; background:var(--accent); color:white; font-size:0.8rem; margin-right:1rem; }
+    .action-btn { padding:0.4rem 0.8rem; border-radius:15px; border:1px solid var(--border); background:var(--bg); color:var(--text); cursor:pointer; font-size:0.85rem; margin-left:0.5rem; transition:all 0.2s; }
+    .action-btn:hover { border-color:var(--accent); color:var(--accent); }
+    .action-btn.danger:hover { border-color:#ff4444; color:#ff4444; }
+  </style>
+</head>
+<body>
+  <nav class="navbar">
+    <div class="nav-container">
+      <div class="nav-left">
+        <div class="logo" onclick="window.location.href='../index.html'" style="cursor:pointer;">Daily News Digest</div>
+        <ul class="nav-menu">
+          <li><a href="../index.html">Home</a></li>
+          <li><a href="category.html?cat=World">World</a></li>
+          <li><a href="category.html?cat=Technology">Technology</a></li>
+          <li><a href="category.html?cat=Sports">Sports</a></li>
+          <li><a href="category.html?cat=Business">Business</a></li>
+          <li><a href="category.html?cat=AI">AI</a></li>
+        </ul>
+      </div>
+      <div class="nav-right">
+        <button id="darkToggle" class="dark-toggle"><i class="fas fa-moon"></i></button>
+        <div class="hamburger" id="hamburgerBtn"><i class="fas fa-bars"></i></div>
+      </div>
+    </div>
+  </nav>
+
+  <div class="hamburger-dropdown" id="hamburgerDropdown">
+    <div class="dropdown-header">
+      <span>Quick Menu</span>
+      <i class="fas fa-times" id="closeDropdown"></i>
+    </div>
+    <ul class="dropdown-menu">
+      <li><a href="signup.html"><i class="fas fa-user-plus"></i> 📍 Signup</a></li>
+      <li><a href="contact.html"><i class="fas fa-envelope"></i> ✅ Contact</a></li>
+      <li><a href="settings.html"><i class="fas fa-cog"></i> 🔗 Settings</a></li>
+      <li><a href="help.html"><i class="fas fa-question-circle"></i> ❓ Help</a></li>
+    </ul>
+  </div>
+  <div class="dropdown-overlay" id="dropdownOverlay"></div>
+
+  <main class="container">
+    <div class="admin-container">
+      <div class="admin-header">
+        <h1>🛡️ Admin Dashboard</h1>
+        <p>Manage your Daily News Digest portal</p>
+      </div>
+
+      <div class="stats-grid">
+        <div class="stat-card">
+          <i class="fas fa-newspaper"></i>
+          <div class="number" id="totalArticles">45</div>
+          <div class="label">Total Articles</div>
+        </div>
+        <div class="stat-card">
+          <i class="fas fa-tags"></i>
+          <div class="number">5</div>
+          <div class="label">Categories</div>
+        </div>
+        <div class="stat-card">
+          <i class="fas fa-eye"></i>
+          <div class="number">12.4k</div>
+          <div class="label">Total Views</div>
+        </div>
+        <div class="stat-card">
+          <i class="fas fa-users"></i>
+          <div class="number">1.2k</div>
+          <div class="label">Subscribers</div>
+        </div>
+      </div>
+
+      <div class="admin-section">
+        <h2><i class="fas fa-list"></i> Recent Articles</h2>
+        <div id="adminArticleList">
+          <p style="opacity:0.6;">Loading articles...</p>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <p>© 2026 Daily News Digest. All rights reserved.</p>
+    <div class="footer-links">
+      <a href="#">Privacy Policy</a>
+      <a href="#">Terms of Service</a>
+      <a href="#">Advertise</a>
+    </div>
+  </footer>
+
+  <script src="../assets/js/script.js"></script>
+  <script>
+    // Admin-specific: show article list from script.js newsData
+    // We read via a MutationObserver trick — newsData is in script.js scope
+    // Since newsData is enclosed, we approximate with static display
+    const sampleArticles = [
+      { id:1, title:'OpenAI launches GPT-5', category:'AI', date:'March 6, 2026' },
+      { id:10, title:'Global climate summit agreement', category:'World', date:'March 5, 2026' },
+      { id:19, title:'Apple Glasses announced', category:'Technology', date:'March 6, 2026' },
+      { id:28, title:'Champions league final', category:'Sports', date:'March 4, 2026' },
+      { id:37, title:'Stock markets rally', category:'Business', date:'March 5, 2026' },
+    ];
+
+    document.getElementById('adminArticleList').innerHTML = sampleArticles.map(a => `
+      <div class="article-row">
+        <div class="info">
+          <strong>${a.title}</strong>
+          <div style="font-size:0.85rem;opacity:0.7;margin-top:0.2rem;">${a.date}</div>
+        </div>
+        <span class="category-badge">${a.category}</span>
+        <div>
+          <button class="action-btn" onclick="window.location.href='article.html?id=${a.id}'">
+            <i class="fas fa-eye"></i> View
+          </button>
+          <button class="action-btn danger" onclick="alert('Delete: Demo only')">
+            <i class="fas fa-trash"></i> Delete
+          </button>
+        </div>
+      </div>
+    `).join('');
+  </script>
+</body>
+</html>

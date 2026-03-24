@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact · Daily News Digest</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <link rel="stylesheet" href="../assets/css/style.css">
+  <style>
+    .contact-container { max-width:900px; margin:3rem auto; padding:2.5rem; background:var(--card-bg); backdrop-filter:blur(16px); border:1px solid var(--border); border-radius:48px; box-shadow:0 25px 50px -12px rgba(0,0,0,0.25); position:relative; overflow:hidden; animation:slideUpFade 0.6s ease; }
+    .contact-container::before { content:''; position:absolute; top:-50%; right:-50%; width:100%; height:200%; background:radial-gradient(circle, var(--accent-glow) 0%, transparent 70%); opacity:0.3; z-index:-1; animation:rotate 20s linear infinite; }
+    @keyframes rotate { from{transform:rotate(0deg);} to{transform:rotate(360deg);} }
+    @keyframes slideUpFade { from{opacity:0;transform:translateY(30px);} to{opacity:1;transform:translateY(0);} }
+    .contact-header { text-align:center; margin-bottom:3rem; }
+    .contact-header h1 { font-size:3rem; background:linear-gradient(135deg,#0066ff,#a855f7,#ec4899); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent; margin-bottom:0.5rem; }
+    .contact-grid { display:grid; grid-template-columns:1fr 1.2fr; gap:2.5rem; margin-bottom:2.5rem; }
+    .contact-info { padding:2rem; background:var(--bg); border-radius:32px; border:1px solid var(--border); transition:all 0.3s; animation:slideInLeft 0.6s ease; }
+    @keyframes slideInLeft { from{opacity:0;transform:translateX(-30px);} to{opacity:1;transform:translateX(0);} }
+    .contact-info:hover { transform:translateY(-5px); box-shadow:0 20px 40px -15px var(--accent-glow); }
+    .contact-info h3 { margin-bottom:2rem; display:flex; align-items:center; gap:0.8rem; font-size:1.5rem; color:var(--accent); }
+    .info-item { display:flex; align-items:center; gap:1.2rem; padding:1.2rem 0; border-bottom:1px solid var(--border); transition:all 0.3s; }
+    .info-item:last-child { border-bottom:none; }
+    .info-item:hover { transform:translateX(10px); padding-left:1rem; border-radius:12px; }
+    .info-item i { width:50px; height:50px; border-radius:50%; background:linear-gradient(135deg,var(--accent),#a855f7); color:white; display:flex; align-items:center; justify-content:center; font-size:1.3rem; box-shadow:0 5px 15px var(--accent-glow); transition:all 0.3s; }
+    .info-item:hover i { transform:scale(1.1) rotate(5deg); }
+    .info-item div { flex:1; }
+    .info-item strong { display:block; margin-bottom:0.3rem; color:var(--accent); }
+    .info-item p { font-size:1rem; opacity:0.9; line-height:1.4; }
+    .contact-form { display:flex; flex-direction:column; gap:1.5rem; padding:2rem; background:var(--bg); border-radius:32px; border:1px solid var(--border); animation:slideInRight 0.6s ease; }
+    @keyframes slideInRight { from{opacity:0;transform:translateX(30px);} to{opacity:1;transform:translateX(0);} }
+    .form-group input, .form-group textarea { width:100%; padding:1rem 1.2rem; border-radius:20px; border:2px solid transparent; background:var(--card-bg); color:var(--text); font-size:1rem; transition:all 0.3s; }
+    .form-group input:focus, .form-group textarea:focus { outline:none; border-color:var(--accent); box-shadow:0 0 0 4px var(--accent-glow); transform:translateY(-2px); }
+    .contact-btn { background:linear-gradient(135deg,var(--accent),#a855f7,#ec4899); color:white; border:none; padding:1.2rem; border-radius:40px; font-weight:700; font-size:1.2rem; cursor:pointer; transition:all 0.3s; position:relative; overflow:hidden; }
+    .contact-btn:hover { transform:translateY(-5px); box-shadow:0 20px 40px var(--accent-glow); }
+    .map-container { margin-top:2.5rem; border-radius:32px; overflow:hidden; height:350px; box-shadow:0 20px 40px -15px rgba(0,0,0,0.3); border:3px solid var(--border); transition:all 0.3s; }
+    .map-container:hover { transform:translateY(-5px); box-shadow:0 30px 50px -15px var(--accent-glow); border-color:var(--accent); }
+    .floating-element { position:fixed; width:150px; height:150px; background:radial-gradient(circle,var(--accent-glow) 0%,transparent 70%); border-radius:50%; z-index:-1; opacity:0.3; pointer-events:none; }
+    .floating-1 { top:10%; left:5%; animation:float 8s ease-in-out infinite; }
+    .floating-2 { bottom:10%; right:5%; animation:float 10s ease-in-out infinite reverse; }
+    @keyframes float { 0%{transform:translateY(0);} 50%{transform:translateY(-20px);} 100%{transform:translateY(0);} }
+    @keyframes successPop { 0%{transform:scale(0) translate(-50%,-50%);} 50%{transform:scale(1.2) translate(-50%,-50%);} 100%{transform:scale(1) translate(-50%,-50%);} }
+    .success-message { position:fixed; top:50%; left:50%; transform:translate(-50%,-50%); background:linear-gradient(135deg,#00c851,#00a5e0); color:white; padding:2rem; border-radius:50px; box-shadow:0 20px 40px rgba(0,0,0,0.3); z-index:1000; animation:successPop 0.5s ease; text-align:center; }
+    .success-message i { font-size:4rem; margin-bottom:1rem; display:block; }
+    @media (max-width:900px) { .contact-grid{grid-template-columns:1fr;} .contact-container{padding:1.5rem;} }
+  </style>
+</head>
+<body>
+  <div class="floating-element floating-1"></div>
+  <div class="floating-element floating-2"></div>
+
+  <nav class="navbar">
+    <div class="nav-container">
+      <div class="nav-left">
+        <div class="logo" onclick="window.location.href='../index.html'" style="cursor:pointer;">Daily News Digest</div>
+        <ul class="nav-menu">
+          <li><a href="../index.html">Home</a></li>
+          <li><a href="category.html?cat=World">World</a></li>
+          <li><a href="category.html?cat=Technology">Technology</a></li>
+          <li><a href="category.html?cat=Sports">Sports</a></li>
+          <li><a href="category.html?cat=Business">Business</a></li>
+          <li><a href="category.html?cat=AI">AI</a></li>
+        </ul>
+      </div>
+      <div class="nav-right">
+        <button id="darkToggle" class="dark-toggle"><i class="fas fa-moon"></i></button>
+        <div class="hamburger" id="hamburgerBtn"><i class="fas fa-bars"></i></div>
+      </div>
+    </div>
+  </nav>
+
+  <div class="hamburger-dropdown" id="hamburgerDropdown">
+    <div class="dropdown-header">
+      <span>Quick Menu</span>
+      <i class="fas fa-times" id="closeDropdown"></i>
+    </div>
+    <ul class="dropdown-menu">
+      <li><a href="signup.html"><i class="fas fa-user-plus"></i> 📍 Signup</a></li>
+      <li><a href="contact.html"><i class="fas fa-envelope"></i> ✅ Contact</a></li>
+      <li><a href="settings.html"><i class="fas fa-cog"></i> 🔗 Settings</a></li>
+      <li><a href="help.html"><i class="fas fa-question-circle"></i> ❓ Help</a></li>
+    </ul>
+  </div>
+  <div class="dropdown-overlay" id="dropdownOverlay"></div>
+
+  <main class="container">
+    <div class="contact-container">
+      <div class="contact-header">
+        <h1>📞 Contact Us</h1>
+        <p>Get in touch with DEV</p>
+      </div>
+      <div class="contact-grid">
+        <div class="contact-info">
+          <h3><i class="fas fa-user-astronaut"></i> DEV's Information</h3>
+          <div class="info-item">
+            <i class="fas fa-user-circle"></i>
+            <div><strong>Name</strong><p>DEV</p></div>
+          </div>
+          <div class="info-item">
+            <i class="fas fa-map-marker-alt"></i>
+            <div>
+              <strong>Address</strong>
+              <p>Dayalbagh, Agra, Uttar Pradesh 282005</p>
+              <p style="font-size:0.9rem;opacity:0.8;">Near Dayalbagh Technical College, Gate No. 5</p>
+            </div>
+          </div>
+          <div class="info-item">
+            <i class="fas fa-phone-alt"></i>
+            <div>
+              <strong>Phone</strong>
+              <p>+91 6398679259</p>
+              <p style="font-size:0.9rem;opacity:0.8;">Available on WhatsApp</p>
+            </div>
+          </div>
+          <div class="info-item">
+            <i class="fas fa-envelope"></i>
+            <div>
+              <strong>Email</strong>
+              <!-- FIX: plain email address, no Cloudflare encoding -->
+              <p><a href="mailto:dev@example.com" style="color:var(--accent);">dev@example.com</a></p>
+            </div>
+          </div>
+          <div class="info-item">
+            <i class="fas fa-clock"></i>
+            <div>
+              <strong>Working Hours</strong>
+              <p>Mon-Fri: 9AM - 6PM</p>
+              <p>Sat: 10AM - 4PM</p>
+            </div>
+          </div>
+          <div class="info-item">
+            <i class="fas fa-globe"></i>
+            <div>
+              <strong>Social Media</strong>
+              <p style="display:flex;gap:1rem;margin-top:0.5rem;">
+                <a href="#" style="color:var(--accent);"><i class="fab fa-instagram fa-lg"></i></a>
+                <a href="#" style="color:var(--accent);"><i class="fab fa-twitter fa-lg"></i></a>
+                <a href="#" style="color:var(--accent);"><i class="fab fa-github fa-lg"></i></a>
+                <a href="#" style="color:var(--accent);"><i class="fab fa-linkedin fa-lg"></i></a>
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <form class="contact-form" id="contactForm">
+          <h3 style="text-align:center;margin-bottom:0.5rem;color:var(--accent);">Send Message</h3>
+          <div class="form-group"><input type="text" placeholder="Your Name" required></div>
+          <div class="form-group"><input type="email" placeholder="Your Email" required></div>
+          <div class="form-group"><input type="text" placeholder="Subject" required></div>
+          <div class="form-group">
+            <textarea rows="5" placeholder="Your Message" style="padding:1rem;border-radius:20px;border:2px solid transparent;background:var(--card-bg);color:var(--text);width:100%;font-family:inherit;font-size:1rem;" required></textarea>
+          </div>
+          <button type="submit" class="contact-btn">
+            <i class="fas fa-paper-plane" style="margin-right:0.5rem;"></i>Send Message →
+          </button>
+        </form>
+      </div>
+
+      <div class="map-container">
+        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3549.748511060513!2d78.008947!3d27.1765!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x397471b8b1c5b3b5%3A0x8c5b3b5c9a8b5c3b!2sDayalbagh%20Technical%20Institute!5e0!3m2!1sen!2sin!4v1700000000000!5m2!1sen!2sin"
+          width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade">
+        </iframe>
+      </div>
+
+      <div style="text-align:center;margin-top:2rem;padding:1rem;background:var(--bg);border-radius:20px;">
+        <p style="opacity:0.8;">
+          <i class="fas fa-location-dot" style="color:var(--accent);margin-right:0.5rem;"></i>
+          <strong>Located at:</strong> Dayalbagh Technical College, Gate No. 5, Dayalbagh, Agra - 282005
+        </p>
+        <p style="margin-top:0.5rem;">
+          <i class="fas fa-clock" style="color:var(--accent);margin-right:0.5rem;"></i>
+          Response time: Within 24 hours
+        </p>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <p>© 2026 Daily News Digest. Created with ❤️ by DEV</p>
+    <div class="footer-links">
+      <a href="#">Privacy Policy</a>
+      <a href="#">Terms of Service</a>
+      <a href="#">Advertise</a>
+    </div>
+  </footer>
+
+  <script src="../assets/js/script.js"></script>
+  <script>
+    document.getElementById('contactForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const successMsg = document.createElement('div');
+      successMsg.className = 'success-message';
+      successMsg.innerHTML = `
+        <i class="fas fa-check-circle"></i>
+        <h3>Message Sent!</h3>
+        <p>Thanks for reaching out, DEV will respond soon!</p>
+      `;
+      document.body.appendChild(successMsg);
+      setTimeout(() => successMsg.remove(), 3000);
+      e.target.reset();
+    });
+  </script>
+</body>
+</html>
