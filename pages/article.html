@@ -1,47 +1,221 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Article · Daily News Digest</title>
+  <meta name="description" content="Read the latest in-depth articles and news analysis on Daily News Digest.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&family=Poppins:wght@400;500;600;700&display=swap"
+    rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-  <!-- FIX: path goes up one level since this file is in pages/ -->
   <link rel="stylesheet" href="../assets/css/style.css">
   <style>
-    .article-source { display:inline-block; margin-top:1rem; padding:0.5rem 1rem; background:var(--card-bg); border-radius:30px; font-size:0.9rem; }
-    .article-source a { color:var(--accent); text-decoration:none; }
-    .article-source a:hover { text-decoration:underline; }
-    .loading-error { text-align:center; padding:4rem; background:var(--card-bg); border-radius:32px; margin:2rem 0; }
-    .loading-error i { font-size:4rem; color:var(--accent); margin-bottom:1rem; }
-    .loading-error .btn { display:inline-block; margin-top:1rem; padding:0.8rem 2rem; background:var(--accent); color:white; text-decoration:none; border-radius:40px; transition:all 0.2s; }
-    .summary-btn { background:var(--accent); color:white; border:none; padding:0.7rem 1.5rem; border-radius:40px; font-weight:500; cursor:pointer; display:inline-flex; align-items:center; gap:0.5rem; transition:all 0.2s; margin-right:1rem; }
-    .summary-btn:hover { transform:translateY(-2px); box-shadow:0 5px 15px var(--accent-glow); }
-    .ai-summary-modal { display:none; position:fixed; top:0; left:0; width:100%; height:100%; z-index:1000; }
-    .modal-overlay { position:absolute; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.7); backdrop-filter:blur(5px); }
-    .modal-content { position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); background:var(--bg); border-radius:20px; width:90%; max-width:600px; max-height:80vh; overflow:hidden; box-shadow:0 20px 60px rgba(0,0,0,0.3); animation:modalFadeIn 0.3s ease; }
-    @keyframes modalFadeIn { from { opacity:0; transform:translate(-50%,-60%); } to { opacity:1; transform:translate(-50%,-50%); } }
-    .modal-header { display:flex; justify-content:space-between; align-items:center; padding:1.5rem; border-bottom:1px solid var(--border); background:var(--card-bg); }
-    .modal-header h3 { margin:0; font-size:1.3rem; display:flex; align-items:center; gap:0.5rem; }
-    .close-modal { background:none; border:none; font-size:1.5rem; color:var(--text-secondary); cursor:pointer; padding:0.5rem; border-radius:50%; transition:all 0.2s; }
-    .close-modal:hover { background:var(--border); }
-    .modal-body { padding:1.5rem; max-height:calc(80vh - 120px); overflow-y:auto; }
-    .summary-options { display:flex; gap:0.5rem; margin-bottom:1.5rem; flex-wrap:wrap; }
-    .option-btn { padding:0.6rem 1.2rem; border:2px solid var(--border); background:var(--card-bg); color:var(--text-secondary); border-radius:25px; cursor:pointer; transition:all 0.2s; font-size:0.9rem; font-weight:500; }
-    .option-btn:hover { border-color:var(--accent); color:var(--accent); }
-    .option-btn.active { background:var(--accent); border-color:var(--accent); color:white; }
-    .summary-content { min-height:150px; }
-    .loading-spinner { text-align:center; padding:2rem; color:var(--text-secondary); }
-    .loading-spinner i { font-size:2rem; margin-bottom:1rem; color:var(--accent); }
-    .summary-text { line-height:1.6; color:var(--text); margin-bottom:1rem; }
-    .key-points { display:flex; flex-direction:column; gap:0.8rem; }
-    .key-point { display:flex; align-items:flex-start; gap:0.8rem; padding:0.8rem; background:var(--card-bg); border-radius:12px; border-left:3px solid var(--accent); }
-    .key-point i { color:var(--accent); margin-top:0.2rem; flex-shrink:0; }
+    /* ── Source tag ── */
+    .article-source {
+      display: inline-block;
+      margin-top: 1rem;
+      padding: .5rem 1rem;
+      background: var(--card-bg);
+      border-radius: 30px;
+      font-size: .9rem;
+    }
+
+    .article-source a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    /* ── AI Modal ── */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, .5);
+      z-index: 1000;
+      backdrop-filter: blur(4px);
+    }
+
+    .ai-modal {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: min(560px, 94vw);
+      background: var(--card-bg, #fff);
+      border: 1px solid var(--border);
+      border-radius: 28px;
+      z-index: 1001;
+      overflow: hidden;
+      box-shadow: 0 24px 64px rgba(0, 0, 0, .25);
+    }
+
+    .modal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.25rem 1.5rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .modal-header h3 {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: 1rem;
+      margin: 0;
+    }
+
+    .modal-options {
+      display: flex;
+      gap: .5rem;
+      padding: 1rem 1.5rem 0;
+    }
+
+    .option-btn {
+      padding: .4rem .95rem;
+      border-radius: 20px;
+      border: 1px solid var(--border);
+      background: var(--bg);
+      color: var(--text);
+      cursor: pointer;
+      font-size: .85rem;
+      transition: all .2s;
+    }
+
+    .option-btn.active {
+      background: var(--accent, #0066ff);
+      color: #fff;
+      border-color: var(--accent, #0066ff);
+    }
+
+    .modal-body {
+      padding: 1.25rem 1.5rem;
+      min-height: 100px;
+    }
+
+    .modal-footer {
+      padding: .75rem 1.5rem;
+      border-top: 1px solid var(--border);
+      font-size: .8rem;
+      opacity: .6;
+    }
+
+    /* ── Share / action bar ── */
+    .social-share {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: .5rem;
+      margin: 1rem 0;
+    }
+
+    .social-share a:not(.summary-btn),
+    .social-share button:not(.summary-btn) {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      border: 1px solid var(--border);
+      color: var(--text);
+      transition: all .2s;
+      background: var(--card-bg);
+      cursor: pointer;
+    }
+
+    .social-share a:hover,
+    .social-share button:hover {
+      background: var(--accent);
+      color: #fff;
+      border-color: var(--accent);
+    }
+
+    .summary-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: .4rem;
+      padding: .4rem .9rem;
+      border-radius: 20px;
+      font-size: .85rem;
+      font-weight: 600;
+      background: linear-gradient(135deg, var(--accent, #0066ff), #a855f7);
+      color: #fff;
+      border: none;
+      width: auto;
+      height: auto;
+      white-space: nowrap;
+      cursor: pointer;
+      transition: all .2s;
+    }
+
+    .summary-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px var(--accent-glow, rgba(0, 102, 255, .3));
+    }
+
+    /* ── Skeleton loaders ── */
+    .skeleton-card {
+      background: var(--card-bg);
+      border-radius: 16px;
+      overflow: hidden;
+    }
+
+    .skeleton-img {
+      height: 180px;
+      background: var(--border);
+      animation: shimmer 1.5s infinite;
+    }
+
+    .skeleton-line {
+      height: 14px;
+      margin: 1rem 1rem .5rem;
+      border-radius: 6px;
+      background: var(--border);
+      animation: shimmer 1.5s infinite;
+    }
+
+    .skeleton-line.short {
+      width: 60%;
+    }
+
+    @keyframes shimmer {
+
+      0%,
+      100% {
+        opacity: .5
+      }
+
+      50% {
+        opacity: 1
+      }
+    }
+
+    /* ── Related grid ── */
+    .related {
+      margin: 3rem 0;
+    }
+
+    .related h2 {
+      margin-bottom: 1.25rem;
+    }
+
+    .related-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 1.25rem;
+    }
   </style>
 </head>
+
 <body>
+
+  <!-- ── Navbar ── -->
   <nav class="navbar">
     <div class="nav-container">
       <div class="nav-left">
@@ -62,6 +236,7 @@
     </div>
   </nav>
 
+  <!-- ── Hamburger dropdown ── -->
   <div class="hamburger-dropdown" id="hamburgerDropdown">
     <div class="dropdown-header">
       <span>Quick Menu</span>
@@ -76,67 +251,89 @@
   </div>
   <div class="dropdown-overlay" id="dropdownOverlay"></div>
 
+  <!-- ── AI Summary Modal ── -->
+  <div class="modal-overlay" id="modalOverlay"></div>
+  <div class="ai-modal" id="aiSummaryModal">
+    <div class="modal-header">
+      <h3><i class="fas fa-robot"></i> AI Summary</h3>
+      <i class="fas fa-times" id="closeModalBtn" style="cursor:pointer;font-size:1.1rem;opacity:.7;"></i>
+    </div>
+    <div class="modal-options">
+      <button class="option-btn active" data-length="short">Short</button>
+      <button class="option-btn" data-length="long">Detailed</button>
+      <button class="option-btn" data-length="keypoints">Key Points</button>
+    </div>
+    <div class="modal-body" id="summaryContent">
+      <p>Generating summary…</p>
+    </div>
+    <div class="modal-footer">
+      <p><i class="fas fa-info-circle"></i> Summarized by Claude AI</p>
+    </div>
+  </div>
+
+  <!-- ── Main Content ── -->
   <main class="container article-page">
-    <a href="javascript:history.back()" class="back-home">
+    <a href="javascript:history.back()" class="back-home"
+      style="display:inline-block;margin:1rem 0;color:var(--text);text-decoration:none;font-weight:500;">
       <i class="fas fa-arrow-left"></i> Back
     </a>
 
     <article>
-      <h1 class="article-title" id="articleTitle">Loading article...</h1>
+      <h1 class="article-title" id="articleTitle">Loading article…</h1>
+
       <div class="article-meta" id="articleMeta">
-        <span class="author"><i class="fas fa-user"></i> <span id="articleAuthor">Loading...</span></span>
-        <span class="date"><i class="fas fa-calendar-alt"></i> <span id="articleDate">Loading...</span></span>
-        <span class="read-time"><i class="fas fa-clock"></i> <span id="articleReadTime">Loading...</span></span>
+        <span class="author"><i class="fas fa-user"></i> <span id="articleAuthor">Loading…</span></span>
+        <span class="date"><i class="fas fa-calendar-alt"></i> <span id="articleDate">Loading…</span></span>
+        <span class="read-time"><i class="fas fa-clock"></i> <span id="articleReadTime">Loading…</span></span>
+        <!-- Sentiment badge is injected here by features.js -->
       </div>
+
+      <!-- Share + action buttons -->
+      <!-- "Listen" button is injected here by features.js (TTS) -->
       <div class="social-share">
-        <span>Share: </span>
-        <a href="#" id="shareTwitter" target="_blank"><i class="fab fa-twitter"></i></a>
-        <a href="#" id="shareFacebook" target="_blank"><i class="fab fa-facebook"></i></a>
-        <a href="#" id="shareLinkedin" target="_blank"><i class="fab fa-linkedin"></i></a>
-        <a href="#" id="shareWhatsapp" target="_blank"><i class="fab fa-whatsapp"></i></a>
-        <a href="#" id="bookmarkArticleBtn"><i class="far fa-bookmark"></i></a>
-        <!-- FIX: button is always shown; JS wires it after aiSummarizer loads -->
-        <button class="summary-btn" id="summaryBtn"><i class="fas fa-robot"></i> AI Summary</button>
+        <span style="font-size:.85rem;opacity:.7;">Share:</span>
+        <a href="#" id="shareTwitter" title="Share on X" target="_blank"><i class="fab fa-twitter"></i></a>
+        <a href="#" id="shareFacebook" title="Share on Facebook" target="_blank"><i class="fab fa-facebook"></i></a>
+        <a href="#" id="shareLinkedin" title="Share on LinkedIn" target="_blank"><i class="fab fa-linkedin"></i></a>
+        <a href="#" id="shareWhatsapp" title="Share on WhatsApp" target="_blank"><i class="fab fa-whatsapp"></i></a>
+        <a href="#" id="bookmarkArticleBtn" title="Bookmark"><i class="far fa-bookmark"></i></a>
+        <button class="summary-btn" id="summaryBtn">
+          <i class="fas fa-robot"></i> AI Summary
+        </button>
       </div>
-      <img src="https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=1200" alt="article" class="article-image" id="articleImage">
+
+      <img src="https://picsum.photos/id/1/800/400" alt="article" class="article-image" id="articleImage"
+        style="width:100%;border-radius:20px;margin:1rem 0;">
+
       <div class="article-content" id="articleContent">
-        <p>Loading article content...</p>
+        <p>Loading article content…</p>
       </div>
+
       <div class="article-source" id="articleSource" style="display:none;">
         <i class="fas fa-external-link-alt"></i> Source: <a href="#" target="_blank" id="sourceLink"></a>
       </div>
     </article>
 
-    <!-- AI Summary Modal -->
-    <div class="ai-summary-modal" id="aiSummaryModal">
-      <div class="modal-overlay" id="modalOverlay"></div>
-      <div class="modal-content">
-        <div class="modal-header">
-          <h3><i class="fas fa-robot"></i> AI Article Summary</h3>
-          <button class="close-modal" id="closeModalBtn">&times;</button>
-        </div>
-        <div class="modal-body">
-          <div class="summary-options">
-            <button class="option-btn active" data-length="short">Short Summary</button>
-            <button class="option-btn" data-length="long">Detailed Summary</button>
-            <button class="option-btn" data-length="keypoints">Key Points</button>
-          </div>
-          <div class="summary-content" id="summaryContent">
-            <div class="loading-spinner">
-              <i class="fas fa-spinner fa-spin"></i>
-              <p>Generating AI summary...</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+    <!-- Reactions injected here by features.js -->
 
     <section class="related">
       <h2>Related articles</h2>
       <div class="related-grid" id="relatedGrid">
-        <div class="skeleton-card"><div class="skeleton-img"></div><div class="skeleton-line"></div><div class="skeleton-line short"></div></div>
-        <div class="skeleton-card"><div class="skeleton-img"></div><div class="skeleton-line"></div><div class="skeleton-line short"></div></div>
-        <div class="skeleton-card"><div class="skeleton-img"></div><div class="skeleton-line"></div><div class="skeleton-line short"></div></div>
+        <div class="skeleton-card">
+          <div class="skeleton-img"></div>
+          <div class="skeleton-line"></div>
+          <div class="skeleton-line short"></div>
+        </div>
+        <div class="skeleton-card">
+          <div class="skeleton-img"></div>
+          <div class="skeleton-line"></div>
+          <div class="skeleton-line short"></div>
+        </div>
+        <div class="skeleton-card">
+          <div class="skeleton-img"></div>
+          <div class="skeleton-line"></div>
+          <div class="skeleton-line short"></div>
+        </div>
       </div>
     </section>
   </main>
@@ -144,69 +341,60 @@
   <footer>
     <p>© 2026 Daily News Digest. All rights reserved.</p>
     <div class="footer-links">
-      <a href="#">Privacy Policy</a>
-      <a href="#">Terms of Service</a>
-      <a href="#">Advertise</a>
+      <a href="help.html">Privacy Policy</a>
+      <a href="help.html">Terms of Service</a>
+      <a href="contact.html">Advertise</a>
     </div>
   </footer>
 
-  <!-- FIX: paths go up one level since this is in pages/ -->
+  <!--
+    LOAD ORDER:
+      1. script.js     — core app, exposes showToast, loads article content
+      2. ai-summarizer.js — AI summary modal (uses Claude API)
+      3. features.js   — progress bar, TTS, sentiment, reactions, markets ticker
+  -->
   <script src="../assets/js/script.js"></script>
   <script src="../assets/js/ai-summarizer.js"></script>
+  <script src="../assets/js/features.js"></script>
+
   <script>
-    document.addEventListener('DOMContentLoaded', function () {
-      const urlParams = new URLSearchParams(window.location.search);
-      const articleId = urlParams.get('id');
-
-      if (!articleId) {
-        showError('No article specified');
-        return;
-      }
-
-      setupShareButtons();
-
-      // FIX: wire up summary button after aiSummarizer is initialized
-      const summaryBtn = document.getElementById('summaryBtn');
-      if (summaryBtn) {
-        summaryBtn.addEventListener('click', () => {
+    // ── Wire up AI Summary button ────────────────────────────────────────────
+    document.addEventListener('DOMContentLoaded', () => {
+      const btn = document.getElementById('summaryBtn');
+      if (btn) {
+        btn.addEventListener('click', () => {
           if (window.aiSummarizer) {
+            // Pass current article title too for better Claude prompts
+            const title = document.getElementById('articleTitle')?.textContent || '';
+            window.aiSummarizer.articleTitle = title;
             window.aiSummarizer.generateSummary();
           }
         });
       }
+
+      setupShareButtons();
     });
 
-    function showError(message) {
-      const article = document.querySelector('article');
-      article.innerHTML = `
-        <div class="loading-error">
-          <i class="fas fa-exclamation-circle"></i>
-          <h2>${message}</h2>
-          <p>The article you're looking for could not be found.</p>
-          <a href="../index.html" class="btn">Go to Homepage</a>
-        </div>
-      `;
-    }
-
+    // ── Share buttons ────────────────────────────────────────────────────────
     function setupShareButtons() {
-      ['Twitter', 'Facebook', 'Linkedin', 'Whatsapp'].forEach(p => {
-        const btn = document.getElementById(`share${p}`);
-        if (!btn) return;
-        btn.addEventListener('click', e => {
+      const platforms = {
+        Twitter: (title, url) => `https://twitter.com/intent/tweet?text=${encodeURIComponent(title)}&url=${encodeURIComponent(url)}`,
+        Facebook: (_, url) => `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`,
+        Linkedin: (_, url) => `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}`,
+        Whatsapp: (title, url) => `https://wa.me/?text=${encodeURIComponent(title + ' ' + url)}`,
+      };
+
+      Object.entries(platforms).forEach(([name, fn]) => {
+        const el = document.getElementById(`share${name}`);
+        if (!el) return;
+        el.addEventListener('click', e => {
           e.preventDefault();
           const title = document.getElementById('articleTitle')?.textContent || '';
-          const url = window.location.href;
-          let shareUrl = '';
-          switch (p.toLowerCase()) {
-            case 'twitter':   shareUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(title)}&url=${encodeURIComponent(url)}`; break;
-            case 'facebook':  shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`; break;
-            case 'linkedin':  shareUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}`; break;
-            case 'whatsapp':  shareUrl = `https://wa.me/?text=${encodeURIComponent(title + ' ' + url)}`; break;
-          }
-          if (shareUrl) window.open(shareUrl, '_blank', 'width=600,height=400');
+          window.open(fn(title, window.location.href), '_blank', 'width=600,height=400');
         });
       });
     }
   </script>
 </body>
+
 </html>

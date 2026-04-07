@@ -128,12 +128,12 @@ document.addEventListener('DOMContentLoaded', () => {
     searchContainer.appendChild(suggestionsBox);
 
     let recentSearches = [];
-    try { recentSearches = JSON.parse(sessionStorage.getItem('recentSearches')) || []; } catch(e) {}
+    try { recentSearches = JSON.parse(localStorage.getItem('recentSearches')) || []; } catch(e) {}
 
     function saveRecentSearch(term) {
       if (!term || term.length < 2) return;
       recentSearches = [term, ...recentSearches.filter(s => s !== term)].slice(0, 5);
-      try { sessionStorage.setItem('recentSearches', JSON.stringify(recentSearches)); } catch(e) {}
+      try { localStorage.setItem('recentSearches', JSON.stringify(recentSearches)); } catch(e) {}
     }
 
     function performSearch(term) {
@@ -488,7 +488,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const bookmarkList = document.getElementById('bookmarkList');
     if (!bookmarkList) return;
     let bookmarks = [];
-    try { bookmarks = JSON.parse(sessionStorage.getItem('bookmarks')) || []; } catch(e) {}
+    try { bookmarks = JSON.parse(localStorage.getItem('bookmarks')) || []; } catch(e) {}
 
     if (bookmarks.length === 0) {
       bookmarkList.innerHTML = '<li style="opacity:0.7;">No bookmarks yet</li>';
@@ -510,7 +510,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!bookmarkBtn) return;
 
     let bookmarks = [];
-    try { bookmarks = JSON.parse(sessionStorage.getItem('bookmarks')) || []; } catch(e) {}
+    try { bookmarks = JSON.parse(localStorage.getItem('bookmarks')) || []; } catch(e) {}
 
     bookmarkBtn.innerHTML = bookmarks.includes(articleId)
       ? '<i class="fas fa-bookmark"></i>'
@@ -518,7 +518,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     bookmarkBtn.addEventListener('click', (e) => {
       e.preventDefault();
-      try { bookmarks = JSON.parse(sessionStorage.getItem('bookmarks')) || []; } catch(e) { bookmarks = []; }
+      try { bookmarks = JSON.parse(localStorage.getItem('bookmarks')) || []; } catch(e) { bookmarks = []; }
 
       if (bookmarks.includes(articleId)) {
         bookmarks = bookmarks.filter(b => b !== articleId);
@@ -529,7 +529,7 @@ document.addEventListener('DOMContentLoaded', () => {
         bookmarkBtn.innerHTML = '<i class="fas fa-bookmark"></i>';
         showToast('✓ Article bookmarked');
       }
-      try { sessionStorage.setItem('bookmarks', JSON.stringify(bookmarks)); } catch(e) {}
+      try { localStorage.setItem('bookmarks', JSON.stringify(bookmarks)); } catch(e) {}
     });
   }
 

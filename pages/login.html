@@ -3,7 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Signup · Daily News Digest</title>
+  <title>Login · Daily News Digest</title>
+  <meta name="description" content="Login to your Daily News Digest account to save articles and manage your preferences.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -67,27 +68,22 @@
   <main class="container">
     <div class="auth-container">
       <div class="auth-header">
-        <h1>📍 Signup</h1>
-        <p>Join Daily News Digest today</p>
+        <h1>🔒 Login</h1>
+        <p>Welcome back to Daily News Digest</p>
       </div>
-      <form class="auth-form" id="signupForm">
-        <div class="form-group">
-          <label><i class="fas fa-user"></i> Full Name</label>
-          <input type="text" placeholder="Enter your full name" required>
-        </div>
+      <form class="auth-form" id="loginForm">
         <div class="form-group">
           <label><i class="fas fa-envelope"></i> Email</label>
           <input type="email" placeholder="Enter your email" required>
         </div>
         <div class="form-group">
           <label><i class="fas fa-lock"></i> Password</label>
-          <input type="password" placeholder="Create a password" required>
+          <input type="password" placeholder="Enter your password" required>
         </div>
-        <div class="form-group">
-          <label><i class="fas fa-lock"></i> Confirm Password</label>
-          <input type="password" placeholder="Confirm your password" required>
+        <div style="text-align:right; font-size:0.9rem; margin-top:-0.5rem;">
+          <a href="#" style="color:var(--accent); text-decoration:none;">Forgot password?</a>
         </div>
-        <button type="submit" class="auth-btn">Create Account →</button>
+        <button type="submit" class="auth-btn">Login →</button>
       </form>
       <div class="social-login">
         <div class="social-btn"><i class="fab fa-google"></i></div>
@@ -95,7 +91,7 @@
         <div class="social-btn"><i class="fab fa-twitter"></i></div>
         <div class="social-btn"><i class="fab fa-github"></i></div>
       </div>
-      <div class="auth-footer">Already have an account? <a href="login.html">Login</a></div>
+      <div class="auth-footer">Don't have an account? <a href="signup.html">Signup</a></div>
     </div>
   </main>
 
@@ -110,9 +106,10 @@
 
   <script src="../assets/js/script.js"></script>
   <script>
-    document.getElementById('signupForm').addEventListener('submit', (e) => {
+    document.getElementById('loginForm').addEventListener('submit', (e) => {
       e.preventDefault();
-      alert('Account created successfully! (Demo)');
+      alert('Logged in successfully! (Demo)');
+      window.location.href = '../index.html';
     });
   </script>
 </body>

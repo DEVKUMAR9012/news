@@ -1,35 +1,284 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Admin · Daily News Digest</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&family=Poppins:wght@400;500;600;700&display=swap"
+    rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <link rel="stylesheet" href="../assets/css/style.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
   <style>
-    .admin-container { max-width:1000px; margin:3rem auto; }
-    .admin-header { text-align:center; margin-bottom:3rem; }
-    .admin-header h1 { font-size:2.5rem; background:linear-gradient(135deg,#0066ff,#a855f7); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent; }
-    .stats-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(200px,1fr)); gap:1.5rem; margin-bottom:3rem; }
-    .stat-card { background:var(--card-bg); border:1px solid var(--border); border-radius:20px; padding:1.5rem; text-align:center; transition:all 0.3s; }
-    .stat-card:hover { transform:translateY(-5px); box-shadow:0 10px 30px var(--accent-glow); }
-    .stat-card i { font-size:2rem; color:var(--accent); margin-bottom:0.5rem; }
-    .stat-card .number { font-size:2rem; font-weight:700; }
-    .stat-card .label { opacity:0.7; font-size:0.9rem; }
-    .admin-section { background:var(--card-bg); border:1px solid var(--border); border-radius:24px; padding:2rem; margin-bottom:2rem; }
-    .admin-section h2 { margin-bottom:1.5rem; display:flex; align-items:center; gap:0.5rem; }
-    .article-row { display:flex; justify-content:space-between; align-items:center; padding:1rem 0; border-bottom:1px solid var(--border); }
-    .article-row:last-child { border-bottom:none; }
-    .article-row .info { flex:1; }
-    .article-row .category-badge { padding:0.3rem 0.8rem; border-radius:20px; background:var(--accent); color:white; font-size:0.8rem; margin-right:1rem; }
-    .action-btn { padding:0.4rem 0.8rem; border-radius:15px; border:1px solid var(--border); background:var(--bg); color:var(--text); cursor:pointer; font-size:0.85rem; margin-left:0.5rem; transition:all 0.2s; }
-    .action-btn:hover { border-color:var(--accent); color:var(--accent); }
-    .action-btn.danger:hover { border-color:#ff4444; color:#ff4444; }
+    /* ── Layout ── */
+    .admin-container {
+      max-width: 1100px;
+      margin: 2rem auto;
+      padding: 0 1rem;
+    }
+
+    .admin-header {
+      text-align: center;
+      margin-bottom: 2.5rem;
+    }
+
+    .admin-header h1 {
+      font-size: 2.4rem;
+      background: linear-gradient(135deg, #0066ff, #a855f7);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .admin-header p {
+      opacity: 0.65;
+      margin-top: 0.3rem;
+    }
+
+    /* ── Stat cards ── */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+      gap: 1.25rem;
+      margin-bottom: 2.5rem;
+    }
+
+    .stat-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 1.5rem;
+      text-align: center;
+      transition: all 0.3s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .stat-card::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, var(--accent-glow, rgba(0, 102, 255, .08)), transparent);
+      opacity: 0;
+      transition: opacity .3s;
+      border-radius: inherit;
+    }
+
+    .stat-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 12px 32px var(--accent-glow, rgba(0, 102, 255, .15));
+    }
+
+    .stat-card:hover::after {
+      opacity: 1;
+    }
+
+    .stat-card i {
+      font-size: 1.8rem;
+      color: var(--accent);
+      margin-bottom: 0.4rem;
+    }
+
+    .stat-card .number {
+      font-size: 2rem;
+      font-weight: 700;
+      line-height: 1;
+    }
+
+    .stat-card .label {
+      opacity: 0.6;
+      font-size: 0.85rem;
+      margin-top: 0.25rem;
+    }
+
+    .stat-card .delta {
+      font-size: 0.78rem;
+      margin-top: 0.4rem;
+    }
+
+    .delta.up {
+      color: #22c55e;
+    }
+
+    .delta.down {
+      color: #ef4444;
+    }
+
+    /* ── Chart sections ── */
+    .charts-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+
+    .chart-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 1.5rem;
+    }
+
+    .chart-card h3 {
+      margin-bottom: 1rem;
+      font-size: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .chart-card canvas {
+      max-height: 240px;
+    }
+
+    /* ── Full-width chart ── */
+    .chart-full {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 1.5rem;
+      margin-bottom: 2rem;
+    }
+
+    .chart-full h3 {
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .chart-full canvas {
+      max-height: 260px;
+    }
+
+    /* ── Article table ── */
+    .admin-section {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 1.5rem;
+      margin-bottom: 2rem;
+    }
+
+    .admin-section h2 {
+      margin-bottom: 1.25rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 1.1rem;
+    }
+
+    .article-row {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.85rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .article-row:last-child {
+      border-bottom: none;
+    }
+
+    .article-row .info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .article-row .info strong {
+      display: block;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      font-size: 0.95rem;
+    }
+
+    .article-row .info small {
+      opacity: 0.6;
+      font-size: 0.8rem;
+    }
+
+    .badge {
+      padding: 0.25rem 0.65rem;
+      border-radius: 20px;
+      background: var(--accent);
+      color: white;
+      font-size: 0.75rem;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    .views-bar {
+      width: 80px;
+      background: var(--border);
+      border-radius: 4px;
+      height: 6px;
+      overflow: hidden;
+    }
+
+    .views-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--accent), #a855f7);
+      border-radius: 4px;
+    }
+
+    .action-btn {
+      padding: 0.35rem 0.7rem;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      background: var(--bg);
+      color: var(--text);
+      cursor: pointer;
+      font-size: 0.82rem;
+      transition: all .2s;
+    }
+
+    .action-btn:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    .action-btn.danger:hover {
+      border-color: #ef4444;
+      color: #ef4444;
+    }
+
+    /* ── Tabs ── */
+    .tab-bar {
+      display: flex;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .tab-btn {
+      padding: 0.45rem 1rem;
+      border-radius: 20px;
+      border: 1px solid var(--border);
+      background: var(--bg);
+      color: var(--text);
+      cursor: pointer;
+      font-size: 0.85rem;
+      transition: all .2s;
+    }
+
+    .tab-btn.active {
+      background: var(--accent);
+      color: white;
+      border-color: var(--accent);
+    }
+
+    @media (max-width: 700px) {
+      .charts-grid {
+        grid-template-columns: 1fr;
+      }
+    }
   </style>
 </head>
+
 <body>
   <nav class="navbar">
     <div class="nav-container">
@@ -67,40 +316,90 @@
 
   <main class="container">
     <div class="admin-container">
+
       <div class="admin-header">
         <h1>🛡️ Admin Dashboard</h1>
-        <p>Manage your Daily News Digest portal</p>
+        <p>Real-time analytics for Daily News Digest</p>
       </div>
 
+      <!-- STAT CARDS -->
       <div class="stats-grid">
         <div class="stat-card">
           <i class="fas fa-newspaper"></i>
-          <div class="number" id="totalArticles">45</div>
+          <div class="number">45</div>
           <div class="label">Total Articles</div>
-        </div>
-        <div class="stat-card">
-          <i class="fas fa-tags"></i>
-          <div class="number">5</div>
-          <div class="label">Categories</div>
+          <div class="delta up">▲ 3 this week</div>
         </div>
         <div class="stat-card">
           <i class="fas fa-eye"></i>
           <div class="number">12.4k</div>
           <div class="label">Total Views</div>
+          <div class="delta up">▲ 8.2% vs last week</div>
         </div>
         <div class="stat-card">
           <i class="fas fa-users"></i>
-          <div class="number">1.2k</div>
+          <div class="number">1,247</div>
           <div class="label">Subscribers</div>
+          <div class="delta up">▲ 54 this month</div>
+        </div>
+        <div class="stat-card">
+          <i class="fas fa-clock"></i>
+          <div class="number">3m 42s</div>
+          <div class="label">Avg. Read Time</div>
+          <div class="delta down">▼ 0.3s vs last week</div>
+        </div>
+        <div class="stat-card">
+          <i class="fas fa-share-alt"></i>
+          <div class="number">842</div>
+          <div class="label">Social Shares</div>
+          <div class="delta up">▲ 19% this week</div>
         </div>
       </div>
 
-      <div class="admin-section">
-        <h2><i class="fas fa-list"></i> Recent Articles</h2>
-        <div id="adminArticleList">
-          <p style="opacity:0.6;">Loading articles...</p>
+      <!-- CHARTS ROW 1: Views over time -->
+      <div class="chart-full">
+        <h3><i class="fas fa-chart-line" style="color:var(--accent)"></i> Daily Pageviews — Last 30 Days</h3>
+        <canvas id="viewsChart"></canvas>
+      </div>
+
+      <!-- CHARTS ROW 2: Category split + Devices -->
+      <div class="charts-grid">
+        <div class="chart-card">
+          <h3><i class="fas fa-tags" style="color:var(--accent)"></i> Views by Category</h3>
+          <canvas id="categoryChart"></canvas>
+        </div>
+        <div class="chart-card">
+          <h3><i class="fas fa-mobile-alt" style="color:var(--accent)"></i> Devices</h3>
+          <canvas id="deviceChart"></canvas>
         </div>
       </div>
+
+      <!-- CHARTS ROW 3: Engagement + Hourly -->
+      <div class="charts-grid">
+        <div class="chart-card">
+          <h3><i class="fas fa-heart" style="color:var(--accent)"></i> Engagement This Week</h3>
+          <canvas id="engagementChart"></canvas>
+        </div>
+        <div class="chart-card">
+          <h3><i class="fas fa-clock" style="color:var(--accent)"></i> Peak Hours (UTC)</h3>
+          <canvas id="hoursChart"></canvas>
+        </div>
+      </div>
+
+      <!-- ARTICLE TABLE with tab filter -->
+      <div class="admin-section">
+        <h2><i class="fas fa-list"></i> Article Performance</h2>
+        <div class="tab-bar" id="catTabs">
+          <button class="tab-btn active" data-cat="All">All</button>
+          <button class="tab-btn" data-cat="AI">AI</button>
+          <button class="tab-btn" data-cat="Technology">Tech</button>
+          <button class="tab-btn" data-cat="World">World</button>
+          <button class="tab-btn" data-cat="Sports">Sports</button>
+          <button class="tab-btn" data-cat="Business">Business</button>
+        </div>
+        <div id="adminArticleList"></div>
+      </div>
+
     </div>
   </main>
 
@@ -114,35 +413,240 @@
   </footer>
 
   <script src="../assets/js/script.js"></script>
-  <script>
-    // Admin-specific: show article list from script.js newsData
-    // We read via a MutationObserver trick — newsData is in script.js scope
-    // Since newsData is enclosed, we approximate with static display
-    const sampleArticles = [
-      { id:1, title:'OpenAI launches GPT-5', category:'AI', date:'March 6, 2026' },
-      { id:10, title:'Global climate summit agreement', category:'World', date:'March 5, 2026' },
-      { id:19, title:'Apple Glasses announced', category:'Technology', date:'March 6, 2026' },
-      { id:28, title:'Champions league final', category:'Sports', date:'March 4, 2026' },
-      { id:37, title:'Stock markets rally', category:'Business', date:'March 5, 2026' },
-    ];
 
-    document.getElementById('adminArticleList').innerHTML = sampleArticles.map(a => `
-      <div class="article-row">
-        <div class="info">
-          <strong>${a.title}</strong>
-          <div style="font-size:0.85rem;opacity:0.7;margin-top:0.2rem;">${a.date}</div>
+  <script>
+    (function () {
+      // ── Sample data ───────────────────────────────────────────────────────
+      const ARTICLES = [
+        { id: 1, title: 'OpenAI launches GPT-5', category: 'AI', views: 3841, shares: 142 },
+        { id: 2, title: 'AI in healthcare breakthrough', category: 'AI', views: 2914, shares: 98 },
+        { id: 3, title: 'Google AI beats humans at maths', category: 'AI', views: 2201, shares: 77 },
+        { id: 10, title: 'Global climate summit agreement', category: 'World', views: 1950, shares: 65 },
+        { id: 11, title: 'Earthquake in Japan', category: 'World', views: 1740, shares: 52 },
+        { id: 19, title: 'Apple Glasses announced', category: 'Technology', views: 3102, shares: 118 },
+        { id: 20, title: 'Tesla robotaxi unveiled', category: 'Technology', views: 2544, shares: 99 },
+        { id: 21, title: 'Quantum computing breakthrough', category: 'Technology', views: 1872, shares: 61 },
+        { id: 28, title: 'Champions League final', category: 'Sports', views: 2300, shares: 84 },
+        { id: 29, title: 'World Cup 2026 preparations', category: 'Sports', views: 1620, shares: 58 },
+        { id: 37, title: 'Stock markets rally', category: 'Business', views: 1490, shares: 47 },
+        { id: 40, title: 'Bitcoin reaches $100,000', category: 'Business', views: 2100, shares: 93 },
+      ];
+      const maxViews = Math.max(...ARTICLES.map(a => a.views));
+
+      // Helper: chart defaults
+      const CSS = (v) => getComputedStyle(document.documentElement).getPropertyValue(v).trim() || v;
+
+      function isDark() { return document.body.classList.contains('dark-mode'); }
+
+      function chartColors() {
+        return {
+          text: isDark() ? '#e5e7eb' : '#1f2937',
+          grid: isDark() ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.06)',
+          accent: '#0066ff',
+        };
+      }
+
+      // ── 1. Pageviews line chart ────────────────────────────────────────────
+      function buildViewsChart() {
+        const labels = [];
+        const data = [];
+        const now = new Date();
+        for (let i = 29; i >= 0; i--) {
+          const d = new Date(now); d.setDate(d.getDate() - i);
+          labels.push(d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }));
+          const base = 350 + Math.sin(i * 0.4) * 80;
+          data.push(Math.round(base + Math.random() * 100));
+        }
+
+        const c = chartColors();
+        return new Chart(document.getElementById('viewsChart'), {
+          type: 'line',
+          data: {
+            labels,
+            datasets: [{
+              label: 'Pageviews',
+              data,
+              borderColor: '#0066ff',
+              backgroundColor: 'rgba(0,102,255,0.08)',
+              fill: true,
+              tension: 0.4,
+              pointRadius: 0,
+              pointHoverRadius: 5,
+              pointBackgroundColor: '#0066ff',
+            }],
+          },
+          options: {
+            responsive: true,
+            plugins: { legend: { display: false } },
+            scales: {
+              x: { ticks: { color: c.text, maxTicksLimit: 8 }, grid: { color: c.grid } },
+              y: { ticks: { color: c.text }, grid: { color: c.grid }, beginAtZero: true },
+            },
+          },
+        });
+      }
+
+      // ── 2. Category doughnut ──────────────────────────────────────────────
+      function buildCategoryChart() {
+        const cats = ['AI', 'Technology', 'World', 'Sports', 'Business'];
+        const totals = cats.map(cat => ARTICLES.filter(a => a.category === cat).reduce((s, a) => s + a.views, 0));
+
+        return new Chart(document.getElementById('categoryChart'), {
+          type: 'doughnut',
+          data: {
+            labels: cats,
+            datasets: [{
+              data: totals,
+              backgroundColor: ['#0066ff', '#a855f7', '#22c55e', '#f59e0b', '#ec4899'],
+              borderWidth: 0,
+              hoverOffset: 6,
+            }],
+          },
+          options: {
+            responsive: true,
+            plugins: {
+              legend: {
+                position: 'right',
+                labels: { color: chartColors().text, font: { size: 12 }, boxWidth: 14 },
+              },
+            },
+            cutout: '65%',
+          },
+        });
+      }
+
+      // ── 3. Devices pie ─────────────────────────────────────────────────────
+      function buildDeviceChart() {
+        return new Chart(document.getElementById('deviceChart'), {
+          type: 'pie',
+          data: {
+            labels: ['Mobile', 'Desktop', 'Tablet'],
+            datasets: [{
+              data: [62, 30, 8],
+              backgroundColor: ['#0066ff', '#a855f7', '#22c55e'],
+              borderWidth: 0,
+              hoverOffset: 6,
+            }],
+          },
+          options: {
+            responsive: true,
+            plugins: {
+              legend: {
+                position: 'right',
+                labels: { color: chartColors().text, font: { size: 12 }, boxWidth: 14 },
+              },
+            },
+          },
+        });
+      }
+
+      // ── 4. Engagement bar ─────────────────────────────────────────────────
+      function buildEngagementChart() {
+        const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+        const likes = [84, 102, 76, 130, 155, 98, 61];
+        const shares = [28, 34, 22, 48, 62, 34, 19];
+        const c = chartColors();
+
+        return new Chart(document.getElementById('engagementChart'), {
+          type: 'bar',
+          data: {
+            labels: days,
+            datasets: [
+              { label: 'Reactions', data: likes, backgroundColor: 'rgba(0,102,255,0.7)', borderRadius: 6 },
+              { label: 'Shares', data: shares, backgroundColor: 'rgba(168,85,247,0.7)', borderRadius: 6 },
+            ],
+          },
+          options: {
+            responsive: true,
+            plugins: { legend: { labels: { color: c.text, font: { size: 12 } } } },
+            scales: {
+              x: { ticks: { color: c.text }, grid: { color: c.grid } },
+              y: { ticks: { color: c.text }, grid: { color: c.grid }, beginAtZero: true },
+            },
+          },
+        });
+      }
+
+      // ── 5. Peak hours ──────────────────────────────────────────────────────
+      function buildHoursChart() {
+        const hours = Array.from({ length: 24 }, (_, i) => `${String(i).padStart(2, '0')}:00`);
+        const data = [10, 6, 4, 3, 4, 9, 28, 52, 68, 78, 82, 88, 72, 64, 58, 62, 75, 80, 72, 55, 42, 30, 22, 14];
+        const c = chartColors();
+
+        return new Chart(document.getElementById('hoursChart'), {
+          type: 'bar',
+          data: {
+            labels: hours,
+            datasets: [{
+              label: 'Visitors',
+              data,
+              backgroundColor: data.map(v => v >= 70 ? 'rgba(0,102,255,0.85)' : 'rgba(0,102,255,0.35)'),
+              borderRadius: 4,
+            }],
+          },
+          options: {
+            responsive: true,
+            plugins: { legend: { display: false } },
+            scales: {
+              x: { ticks: { color: c.text, maxTicksLimit: 8 }, grid: { color: c.grid } },
+              y: { ticks: { color: c.text }, grid: { color: c.grid }, beginAtZero: true },
+            },
+          },
+        });
+      }
+
+      // ── Article table ──────────────────────────────────────────────────────
+      function renderTable(filter) {
+        const rows = filter === 'All' ? ARTICLES : ARTICLES.filter(a => a.category === filter);
+        const list = document.getElementById('adminArticleList');
+        if (!list) return;
+
+        if (rows.length === 0) {
+          list.innerHTML = '<p style="opacity:.6;padding:1rem 0;">No articles in this category.</p>';
+          return;
+        }
+
+        list.innerHTML = rows.sort((a, b) => b.views - a.views).map(a => `
+        <div class="article-row">
+          <div class="info">
+            <strong>${a.title}</strong>
+            <small>${a.category} · ${a.views.toLocaleString()} views · ${a.shares} shares</small>
+          </div>
+          <div class="views-bar" title="${a.views} views">
+            <div class="views-bar-fill" style="width:${Math.round((a.views / maxViews) * 100)}%"></div>
+          </div>
+          <span class="badge">${a.category}</span>
+          <div style="display:flex;gap:0.4rem;margin-left:0.5rem;">
+            <button class="action-btn" onclick="window.location.href='article.html?id=${a.id}'">
+              <i class="fas fa-eye"></i>
+            </button>
+            <button class="action-btn danger" onclick="alert('Delete: Demo only')">
+              <i class="fas fa-trash"></i>
+            </button>
+          </div>
         </div>
-        <span class="category-badge">${a.category}</span>
-        <div>
-          <button class="action-btn" onclick="window.location.href='article.html?id=${a.id}'">
-            <i class="fas fa-eye"></i> View
-          </button>
-          <button class="action-btn danger" onclick="alert('Delete: Demo only')">
-            <i class="fas fa-trash"></i> Delete
-          </button>
-        </div>
-      </div>
-    `).join('');
+      `).join('');
+      }
+
+      // ── Tabs ───────────────────────────────────────────────────────────────
+      document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          renderTable(btn.dataset.cat);
+        });
+      });
+
+      // ── Init ───────────────────────────────────────────────────────────────
+      buildViewsChart();
+      buildCategoryChart();
+      buildDeviceChart();
+      buildEngagementChart();
+      buildHoursChart();
+      renderTable('All');
+
+    })();
   </script>
 </body>
+
 </html>
