@@ -11,8 +11,45 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📰</text></svg>">
   <link rel="stylesheet" href="assets/css/style.css">
+  <style>
+    /* Auth check loading indicator */
+    .auth-check-loader {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: var(--bg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+      opacity: 1;
+      transition: opacity 0.3s ease;
+    }
+    .auth-check-loader.hidden {
+      opacity: 0;
+      pointer-events: none;
+    }
+    .loader-spinner {
+      width: 50px;
+      height: 50px;
+      border: 4px solid var(--border);
+      border-top: 4px solid var(--accent);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+  </style>
 </head>
 <body>
+  <!-- Auth state loading indicator -->
+  <div class="auth-check-loader" id="authCheckLoader">
+    <div class="loader-spinner"></div>
+  </div>
+
   <nav class="navbar">
     <div class="nav-container">
       <div class="nav-left">
@@ -56,11 +93,11 @@
 
   <main class="container">
     <section class="hero">
-      <div class="hero-card">
-        <img src="https://picsum.photos/id/1043/1200/600" alt="hero">
+      <div class="hero-card" id="heroCard" onclick="window.location.href='pages/article.html?id=1'" style="cursor:pointer;">
+        <img src="https://picsum.photos/id/1/1200/600" alt="hero" id="heroImage">
         <div class="hero-overlay">
-          <h1>The future of AI: how large language models reshape our world</h1>
-          <p>Exclusive report on the next generation of generative intelligence</p>
+          <h1 id="heroTitle">The future of AI: how large language models reshape our world</h1>
+          <p id="heroDesc">Exclusive report on the next generation of generative intelligence</p>
         </div>
       </div>
     </section>
@@ -116,6 +153,49 @@
     </div>
   </footer>
 
+  <script type="module" src="assets/js/firebase-init.js"></script>
+  <script src="assets/js/auth.js"></script>
   <script src="assets/js/script.js"></script>
+  <script>
+    // Update hero section with first article's data
+    function updateHeroSection() {
+      // Note: newsData is defined in script.js
+      if (typeof newsData !== 'undefined' && newsData.length > 0) {
+        const firstArticle = newsData[0];
+        const heroTitle = document.getElementById('heroTitle');
+        const heroDesc = document.getElementById('heroDesc');
+        const heroImage = document.getElementById('heroImage');
+        const heroCard = document.getElementById('heroCard');
+        
+        if (heroTitle) heroTitle.textContent = firstArticle.title;
+        if (heroDesc) heroDesc.textContent = firstArticle.desc;
+        if (heroImage) heroImage.src = firstArticle.image.replace('400/250', '1200/600') || firstArticle.image;
+        if (heroCard) heroCard.onclick = () => window.location.href = `pages/article.html?id=${firstArticle.id}`;
+      }
+    }
+    
+    // Call after DOM is ready
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', updateHeroSection);
+    } else {
+      updateHeroSection();
+    }
+    
+    // Hide loading indicator after auth state is checked
+    setTimeout(() => {
+      const loader = document.getElementById('authCheckLoader');
+      if (loader) {
+        if (typeof authStateLoaded === 'function' && authStateLoaded()) {
+          loader.classList.add('hidden');
+        } else {
+          // Fallback: hide after 1 second regardless (prevents stuck spinner)
+          loader.classList.add('hidden');
+        }
+      }
+    }, 500);
+    
+    // Only update navbar if user is logged in (don't force login for home page)
+    updateNavbar();
+  </script>
 </body>
 </html>

@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Verify Email · Daily News Digest</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/css/style.css">
+  <style>
+    .verify-container { max-width: 480px; margin: 6rem auto; padding: 3rem; background: var(--card-bg); border: 1px solid var(--border); border-radius: 32px; box-shadow: var(--shadow); text-align: center; }
+    .verify-icon { font-size: 4rem; margin-bottom: 1rem; }
+    .verify-container h1 { font-size: 1.8rem; margin-bottom: 0.5rem; }
+    .verify-container p { opacity: 0.7; margin-bottom: 2rem; }
+    .verify-btn { display: inline-block; background: var(--accent); color: white; padding: 1rem 2.5rem; border-radius: 40px; text-decoration: none; font-weight: 600; transition: all 0.2s; }
+    .verify-btn:hover { transform: translateY(-3px); box-shadow: 0 10px 25px var(--accent-glow); }
+  </style>
+</head>
+<body>
+  <main class="container">
+    <div class="verify-container">
+      <div class="verify-icon" id="icon">⏳</div>
+      <h1 id="title">Verifying your email...</h1>
+      <p id="subtitle">Please wait while we verify your account.</p>
+      <div id="action"></div>
+    </div>
+  </main>
+
+  <script>
+    const API = 'http://localhost:5000/api';
+    const params = new URLSearchParams(window.location.search);
+    const token = params.get('token');
+
+    async function verify() {
+      const icon = document.getElementById('icon');
+      const title = document.getElementById('title');
+      const subtitle = document.getElementById('subtitle');
+      const action = document.getElementById('action');
+
+      if (!token) {
+        icon.textContent = '❌';
+        title.textContent = 'Invalid Link';
+        subtitle.textContent = 'This verification link is invalid or missing.';
+        return;
+      }
+
+      try {
+        const res = await fetch(`${API}/auth/verify/${token}`);
+        const data = await res.json();
+
+        if (res.ok) {
+          icon.textContent = '✅';
+          title.textContent = 'Email Verified!';
+          title.style.color = '#22c55e';
+          subtitle.textContent = data.message;
+          action.innerHTML = '<a href="login.html" class="verify-btn">Go to Login →</a>';
+        } else {
+          icon.textContent = '❌';
+          title.textContent = 'Verification Failed';
+          subtitle.textContent = data.message;
+          action.innerHTML = '<a href="signup.html" class="verify-btn">Back to Signup</a>';
+        }
+      } catch {
+        icon.textContent = '⚠️';
+        title.textContent = 'Connection Error';
+        subtitle.textContent = 'Could not connect to the server. Please try again.';
+      }
+    }
+
+    verify();
+  </script>
+</body>
+</html>

@@ -70,6 +70,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const newsGrid = document.getElementById('newsGrid');
     if (!newsGrid) return;
     const base = getBasePath();
+    const user = typeof getUser === 'function' ? getUser() : null;
     newsGrid.innerHTML = articles.map(a => `
       <div class="news-card" data-id="${a.id}" onclick="window.location.href='${base}article.html?id=${a.id}'">
         <div class="card-img">
@@ -83,15 +84,36 @@ document.addEventListener('DOMContentLoaded', () => {
           <p>${a.desc}</p>
           <div class="card-footer">
             <span>${a.date.split(' ')[0]} · ${a.author.split(' ')[0]}</span>
-            <button class="read-more" onclick="event.stopPropagation(); window.location.href='${base}article.html?id=${a.id}'">
-              Read Full →
-            </button>
+            <div style="display:flex;gap:0.5rem;align-items:center;">
+              ${user ? `<button class="bookmark-btn" data-id="${a.id}" onclick="event.stopPropagation(); toggleBookmark(this, '${a.id}')" title="Save article" style="background:none;border:1px solid var(--border);border-radius:50%;width:34px;height:34px;cursor:pointer;color:var(--text);font-size:1rem;display:flex;align-items:center;justify-content:center;transition:all 0.2s;">🔖</button>` : ''}
+              <button class="read-more" onclick="event.stopPropagation(); window.location.href='${base}article.html?id=${a.id}'">
+                Read Full →
+              </button>
+            </div>
           </div>
         </div>
       </div>
     `).join('');
     observeCards();
   }
+
+  // Bookmark toggle function
+  window.toggleBookmark = async function(btn, articleId) {
+    const token = typeof getToken === 'function' ? getToken() : null;
+    if (!token) { alert('Please log in to save articles.'); return; }
+    btn.textContent = '⏳';
+    try {
+      const res = await fetch('http://localhost:5000/api/user/save-article', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+        body: JSON.stringify({ articleId: String(articleId) })
+      });
+      const data = await res.json();
+      btn.textContent = data.saved ? '❤️' : '🔖';
+      btn.title = data.saved ? 'Saved!' : 'Save article';
+      btn.style.background = data.saved ? 'rgba(239,68,68,0.1)' : 'none';
+    } catch { btn.textContent = '🔖'; }
+  };
 
   // ============================================
   // SEARCH WITH DEBOUNCE

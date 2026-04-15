@@ -1,35 +1,203 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Login · Daily News Digest</title>
-  <meta name="description" content="Login to your Daily News Digest account to save articles and manage your preferences.">
+  <meta name="description"
+    content="Login to your Daily News Digest account to save articles and manage your preferences.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&family=Poppins:wght@400;500;600;700&display=swap"
+    rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <link rel="stylesheet" href="../assets/css/style.css">
   <style>
-    .auth-container { max-width:500px; margin:3rem auto; padding:2.5rem; background:var(--card-bg); backdrop-filter:blur(16px); border:1px solid var(--border); border-radius:32px; box-shadow:var(--shadow); }
-    .auth-header { text-align:center; margin-bottom:2rem; }
-    .auth-header h1 { font-size:2.2rem; background:linear-gradient(135deg,#0066ff,#a855f7); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent; margin-bottom:0.5rem; }
-    .auth-header p { opacity:0.7; }
-    .auth-form { display:flex; flex-direction:column; gap:1.5rem; }
-    .form-group { display:flex; flex-direction:column; gap:0.5rem; }
-    .form-group label { font-weight:500; display:flex; align-items:center; gap:0.5rem; }
-    .form-group label i { color:var(--accent); }
-    .form-group input { padding:1rem; border-radius:16px; border:1px solid var(--border); background:var(--bg); color:var(--text); font-size:1rem; transition:all 0.2s; }
-    .form-group input:focus { outline:none; border-color:var(--accent); box-shadow:0 0 0 3px var(--accent-glow); }
-    .auth-btn { background:var(--accent); color:white; border:none; padding:1rem; border-radius:40px; font-weight:600; font-size:1.1rem; cursor:pointer; transition:all 0.2s; margin-top:1rem; }
-    .auth-btn:hover { transform:translateY(-3px); box-shadow:0 10px 25px var(--accent-glow); }
-    .auth-footer { text-align:center; margin-top:2rem; opacity:0.7; }
-    .auth-footer a { color:var(--accent); text-decoration:none; font-weight:600; }
-    .social-login { display:flex; justify-content:center; gap:1rem; margin-top:2rem; }
-    .social-btn { width:50px; height:50px; border-radius:50%; background:var(--card-bg); border:1px solid var(--border); display:flex; align-items:center; justify-content:center; color:var(--text); font-size:1.5rem; cursor:pointer; transition:all 0.2s; }
-    .social-btn:hover { background:var(--accent); color:white; transform:translateY(-3px); }
+    .auth-container {
+      max-width: 500px;
+      margin: 3rem auto;
+      padding: 2.5rem;
+      background: var(--card-bg);
+      backdrop-filter: blur(16px);
+      border: 1px solid var(--border);
+      border-radius: 32px;
+      box-shadow: var(--shadow);
+    }
+
+    .auth-header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    .auth-header h1 {
+      font-size: 2.2rem;
+      background: linear-gradient(135deg, #0066ff, #a855f7);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 0.5rem;
+    }
+
+    .auth-header p {
+      opacity: 0.7;
+    }
+
+    .auth-form {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .form-group label {
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .form-group label i {
+      color: var(--accent);
+    }
+
+    .form-group input {
+      padding: 1rem;
+      border-radius: 16px;
+      border: 1px solid var(--border);
+      background: var(--bg);
+      color: var(--text);
+      font-size: 1rem;
+      transition: all 0.2s;
+    }
+
+    .form-group input:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px var(--accent-glow);
+    }
+
+    .auth-btn {
+      background: var(--accent);
+      color: white;
+      border: none;
+      padding: 1rem;
+      border-radius: 40px;
+      font-weight: 600;
+      font-size: 1.1rem;
+      cursor: pointer;
+      transition: all 0.2s;
+      margin-top: 1rem;
+    }
+
+    .auth-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 25px var(--accent-glow);
+    }
+
+    .auth-btn:disabled {
+      opacity: 0.6;
+      transform: none;
+      cursor: not-allowed;
+    }
+
+    .auth-footer {
+      text-align: center;
+      margin-top: 2rem;
+      opacity: 0.7;
+    }
+
+    .auth-footer a {
+      color: var(--accent);
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .divider {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin: 1rem 0;
+      color: var(--text);
+      opacity: 0.4;
+      font-size: 0.9rem;
+    }
+
+    .divider::before,
+    .divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+
+    .google-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.75rem;
+      width: 100%;
+      padding: 0.9rem;
+      border-radius: 40px;
+      border: 1px solid var(--border);
+      background: var(--card-bg);
+      color: var(--text);
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .google-btn:hover {
+      border-color: var(--accent);
+      background: var(--hover);
+    }
+
+    .msg {
+      padding: 0.8rem 1rem;
+      border-radius: 12px;
+      margin-top: 1rem;
+      font-size: 0.9rem;
+      text-align: center;
+    }
+
+    .msg.error {
+      background: rgba(239, 68, 68, 0.1);
+      border: 1px solid rgba(239, 68, 68, 0.3);
+      color: #ef4444;
+    }
+
+    .msg.success {
+      background: rgba(34, 197, 94, 0.1);
+      border: 1px solid rgba(34, 197, 94, 0.3);
+      color: #22c55e;
+    }
+
+    .msg.warning {
+      background: rgba(245, 158, 11, 0.1);
+      border: 1px solid rgba(245, 158, 11, 0.3);
+      color: #f59e0b;
+    }
+
+    .resend-link {
+      color: var(--accent);
+      cursor: pointer;
+      background: none;
+      border: none;
+      font-size: 0.9rem;
+      text-decoration: underline;
+      margin-top: 0.5rem;
+      display: block;
+    }
   </style>
 </head>
+
 <body>
   <nav class="navbar">
     <div class="nav-container">
@@ -56,12 +224,7 @@
       <span>Quick Menu</span>
       <i class="fas fa-times" id="closeDropdown"></i>
     </div>
-    <ul class="dropdown-menu">
-      <li><a href="signup.html"><i class="fas fa-user-plus"></i> 📍 Signup</a></li>
-      <li><a href="contact.html"><i class="fas fa-envelope"></i> ✅ Contact</a></li>
-      <li><a href="settings.html"><i class="fas fa-cog"></i> 🔗 Settings</a></li>
-      <li><a href="help.html"><i class="fas fa-question-circle"></i> ❓ Help</a></li>
-    </ul>
+    <ul class="dropdown-menu"></ul>
   </div>
   <div class="dropdown-overlay" id="dropdownOverlay"></div>
 
@@ -71,26 +234,47 @@
         <h1>🔒 Login</h1>
         <p>Welcome back to Daily News Digest</p>
       </div>
-      <form class="auth-form" id="loginForm">
+
+      <!--
+        FIX 1: Removed data-client_id="YOUR_GOOGLE_CLIENT_ID" placeholder from here.
+        GSI is now initialised programmatically in the script block below using
+        GOOGLE_CLIENT_ID, which means one place to set the real value and no risk
+        of GSI rejecting a literal placeholder string and blocking page JS.
+      -->
+      <div id="g_id_onload" data-callback="handleGoogleSignIn" data-auto_prompt="false"></div>
+
+      <button class="google-btn" id="googleLoginBtn">
+        <svg width="20" height="20" viewBox="0 0 48 48">
+          <path fill="#4285F4"
+            d="M44.5 20H24v8.5h11.8C34.7 33.9 29.8 37 24 37c-7.2 0-13-5.8-13-13s5.8-13 13-13c3.1 0 5.9 1.1 8.1 2.9l6.4-6.4C34.6 5.1 29.6 3 24 3 12.9 3 4 11.9 4 23s8.9 20 20 20 20-8.9 20-20c0-1.4-.1-2.7-.5-4z" />
+          <path fill="#34A853"
+            d="M6.3 14.7l7 5.1C15.1 16.4 19.2 13 24 13c3.1 0 5.9 1.1 8.1 2.9l6.4-6.4C34.6 5.1 29.6 3 24 3c-7.8 0-14.5 4.6-17.7 11.7z" />
+          <path fill="#FBBC05"
+            d="M24 43c5.6 0 10.5-1.9 14.3-5.1l-6.6-5.4C29.8 34.4 27 35.5 24 35.5c-5.7 0-10.5-3.9-12.2-9.2l-7 5.4C8.1 39.1 15.4 43 24 43z" />
+          <path fill="#EA4335"
+            d="M44.5 20H24v8.5h11.8c-.9 2.6-2.7 4.8-5 6.3l6.6 5.4c3.8-3.6 6.1-8.9 6.1-15.2 0-1.4-.1-2.7-.5-4z" />
+        </svg>
+        Continue with Google
+      </button>
+
+      <div class="divider">or login with email</div>
+
+      <form class="auth-form" id="loginForm" novalidate>
         <div class="form-group">
           <label><i class="fas fa-envelope"></i> Email</label>
-          <input type="email" placeholder="Enter your email" required>
+          <input type="email" id="loginEmail" placeholder="Enter your email" required>
         </div>
         <div class="form-group">
           <label><i class="fas fa-lock"></i> Password</label>
-          <input type="password" placeholder="Enter your password" required>
+          <input type="password" id="loginPassword" placeholder="Enter your password" required>
         </div>
         <div style="text-align:right; font-size:0.9rem; margin-top:-0.5rem;">
-          <a href="#" style="color:var(--accent); text-decoration:none;">Forgot password?</a>
+          <a href="forgot-password.html" style="color:var(--accent); text-decoration:none;">Forgot password?</a>
         </div>
-        <button type="submit" class="auth-btn">Login →</button>
+        <div id="msgBox"></div>
+        <button type="submit" class="auth-btn" id="loginBtn">Login →</button>
       </form>
-      <div class="social-login">
-        <div class="social-btn"><i class="fab fa-google"></i></div>
-        <div class="social-btn"><i class="fab fa-facebook-f"></i></div>
-        <div class="social-btn"><i class="fab fa-twitter"></i></div>
-        <div class="social-btn"><i class="fab fa-github"></i></div>
-      </div>
+
       <div class="auth-footer">Don't have an account? <a href="signup.html">Signup</a></div>
     </div>
   </main>
@@ -100,17 +284,152 @@
     <div class="footer-links">
       <a href="#">Privacy Policy</a>
       <a href="#">Terms of Service</a>
-      <a href="#">Advertise</a>
+      <a href="#">Contact</a>
     </div>
   </footer>
 
+  <!-- Load scripts — auth.js exposes API_BASE, setSession, redirectIfLoggedIn -->
   <script src="../assets/js/script.js"></script>
+  <script src="../assets/js/auth.js"></script>
+  <!--
+    FIX 1 (cont): GSI loaded async as before; we initialise it manually via
+    google.accounts.id.initialize() once the library fires its onload, so the
+    real client ID is injected from JS rather than a static HTML attribute.
+  -->
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
   <script>
-    document.getElementById('loginForm').addEventListener('submit', (e) => {
+    redirectIfLoggedIn();
+
+    // ── Set your real Google OAuth client ID here (single source of truth) ──
+    // FIX 1: was previously the literal placeholder "YOUR_GOOGLE_CLIENT_ID"
+    // in the data-client_id HTML attribute; now set once in JS.
+    const GOOGLE_CLIENT_ID = '443827422555-k36j8hta1jb5qs2sqhkncc5afae14gl3.apps.googleusercontent.com';
+
+    // ── Initialise GSI once the library has fully loaded ──
+    // FIX 1 (cont): calling initialize() here means the real client ID is
+    // applied programmatically, avoiding GSI rejecting the placeholder string.
+    let gsiReady = false;
+    window.addEventListener('load', () => {
+      if (typeof google === 'undefined' || !google?.accounts?.id) return;
+      google.accounts.id.initialize({
+        client_id: GOOGLE_CLIENT_ID,
+        callback: handleGoogleSignIn,
+        auto_prompt: false
+      });
+      gsiReady = true;
+    });
+
+    let isSubmitting = false;
+
+    function showMsg(text, type) {
+      const box = document.getElementById('msgBox');
+      box.className = `msg ${type}`;
+      box.textContent = text;
+    }
+
+    // ── Remove any default form submission behaviour from script.js ──
+    // by replacing the form element's listener with a fresh one only once.
+    const loginForm = document.getElementById('loginForm');
+    const freshForm = loginForm.cloneNode(true); // cloneNode strips all event listeners
+    loginForm.parentNode.replaceChild(freshForm, loginForm);
+
+    freshForm.addEventListener('submit', async (e) => {
       e.preventDefault();
-      alert('Logged in successfully! (Demo)');
-      window.location.href = '../index.html';
+      e.stopImmediatePropagation(); // block any other listeners on this element
+
+      if (isSubmitting) return;
+      isSubmitting = true;
+
+      const btn = document.getElementById('loginBtn');
+      btn.disabled = true;
+      btn.textContent = 'Logging in...';
+
+      const email = document.getElementById('loginEmail').value.trim();
+      const password = document.getElementById('loginPassword').value;
+
+      try {
+        const res = await fetch(`${API_BASE}/auth/login`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, password })
+        });
+        const data = await res.json();
+
+        if (!res.ok) {
+          if (data.notVerified) {
+            const box = document.getElementById('msgBox');
+            box.className = 'msg warning';
+            // Build the warning message safely (no innerHTML with user data)
+            box.textContent = '⚠️ Email not verified. ';
+            const resendBtn = document.createElement('button');
+            resendBtn.className = 'resend-link';
+            resendBtn.textContent = 'Resend verification email';
+            resendBtn.addEventListener('click', () => resendVerification(email));
+            box.appendChild(resendBtn);
+          } else {
+            showMsg(data.message || 'Login failed.', 'error');
+          }
+        } else {
+          setSession(data.token, data.user);
+          showMsg('✅ Logged in! Redirecting...', 'success');
+          setTimeout(() => window.location.href = '../index.html', 1000);
+        }
+      } catch (err) {
+        showMsg('Cannot connect to server. Make sure the backend is running.', 'error');
+      } finally {
+        btn.disabled = false;
+        btn.textContent = 'Login →';
+        isSubmitting = false;
+      }
+    });
+
+    // ── Resend Verification ──
+    async function resendVerification(email) {
+      try {
+        const res = await fetch(`${API_BASE}/auth/resend-verification`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email })
+        });
+        const data = await res.json();
+        showMsg(data.message, res.ok ? 'success' : 'error');
+      } catch {
+        showMsg('Failed to resend. Try again later.', 'error');
+      }
+    }
+
+    // ── Google Login callback ──
+    async function handleGoogleSignIn(response) {
+      try {
+        const res = await fetch(`${API_BASE}/auth/google`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ credential: response.credential })
+        });
+        const data = await res.json();
+
+        if (!res.ok) {
+          showMsg(data.message || 'Google login failed.', 'error');
+        } else {
+          setSession(data.token, data.user);
+          window.location.href = '../index.html';
+        }
+      } catch (err) {
+        showMsg('Google login failed. Check your connection.', 'error');
+      }
+    }
+
+    // ── Google button click ──
+    // FIX 2: guarded against google being undefined if GSI script failed to load,
+    // which previously caused an uncaught TypeError that could block other JS.
+    document.getElementById('googleLoginBtn').addEventListener('click', () => {
+      if (!gsiReady || typeof google === 'undefined' || !google?.accounts?.id) {
+        showMsg('Google Sign-In is unavailable. Check your connection and try again.', 'error');
+        return;
+      }
+      google.accounts.id.prompt();
     });
   </script>
 </body>
+
 </html>
