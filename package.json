@@ -1,4 +1,9 @@
 {
+  "scripts": {
+    "start": "npm --prefix server start",
+    "dev": "npm --prefix server run dev",
+    "check": "npm --prefix server run check"
+  },
   "dependencies": {
     "firebase": "^12.11.0"
   }

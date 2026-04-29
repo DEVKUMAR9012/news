@@ -1,0 +1,6 @@
+{
+  "name": "Daily News Digest",
+  "tiers": [],
+  "pricing": [],
+  "features": ["news feed", "category browsing", "article search", "bookmarks", "email signup/login", "Google login"]
+}

@@ -27,7 +27,9 @@
   </main>
 
   <script>
-    const API = 'http://localhost:5000/api';
+    const API = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
+      ? `http://${window.location.hostname}:5000/api`
+      : '/api';
     const params = new URLSearchParams(window.location.search);
     const token = params.get('token');
 

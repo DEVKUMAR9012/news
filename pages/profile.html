@@ -114,7 +114,9 @@
   <script>
     requireAuth();
 
-    const API = 'http://localhost:5000/api';
+    const API = window.API_BASE || ((window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
+      ? `http://${window.location.hostname}:5000/api`
+      : '/api');
 
     async function loadProfile() {
       const token = getToken();
@@ -156,13 +158,16 @@
           user.savedArticles.forEach(id => {
             const card = document.createElement('div');
             card.className = 'saved-card';
-            card.innerHTML = `
-              <div style="font-size:1.5rem;margin-bottom:0.5rem;">📰</div>
-              <h4>Article #${id}</h4>
-              <p>Click to read the full article</p>
-            `;
+            const icon = document.createElement('div');
+            icon.style.cssText = 'font-size:1.5rem;margin-bottom:0.5rem;';
+            icon.textContent = 'News';
+            const title = document.createElement('h4');
+            title.textContent = `Article #${id}`;
+            const description = document.createElement('p');
+            description.textContent = 'Click to read the full article';
+            card.append(icon, title, description);
             card.addEventListener('click', () => {
-              window.location.href = `article.html?id=${id}`;
+              window.location.href = `article.html?id=${encodeURIComponent(String(id))}`;
             });
             grid.appendChild(card);
           });

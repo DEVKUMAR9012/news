@@ -1,0 +1,21 @@
+{
+  "baseUrl": "/api",
+  "routes": [
+    { "method": "GET", "path": "/", "handler": "server/index.js" },
+    { "method": "POST", "path": "/api/auth/signup", "handler": "server/routes/auth.js" },
+    { "method": "POST", "path": "/api/auth/verify-otp", "handler": "server/routes/auth.js" },
+    { "method": "GET", "path": "/api/auth/verify/:token", "handler": "server/routes/auth.js" },
+    { "method": "POST", "path": "/api/auth/resend-verification", "handler": "server/routes/auth.js" },
+    { "method": "POST", "path": "/api/auth/login", "handler": "server/routes/auth.js" },
+    { "method": "POST", "path": "/api/auth/google", "handler": "server/routes/auth.js" },
+    { "method": "POST", "path": "/api/auth/forgot-password", "handler": "server/routes/auth.js" },
+    { "method": "POST", "path": "/api/auth/reset-password", "handler": "server/routes/auth.js" },
+    { "method": "GET", "path": "/api/user/profile", "handler": "server/routes/user.js", "auth": "jwt" },
+    { "method": "POST", "path": "/api/user/save-article", "handler": "server/routes/user.js", "auth": "jwt" },
+    { "method": "GET", "path": "/api/user/saved-articles", "handler": "server/routes/user.js", "auth": "jwt" },
+    { "method": "GET", "path": "/api/news/latest", "handler": "server/routes/news.js" },
+    { "method": "GET", "path": "/api/news/category/:category", "handler": "server/routes/news.js" },
+    { "method": "GET", "path": "/api/news/search", "handler": "server/routes/news.js" },
+    { "method": "GET", "path": "/api/news/:id", "handler": "server/routes/news.js" }
+  ]
+}

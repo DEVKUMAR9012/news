@@ -1,0 +1,4 @@
+{
+  "httpStatuses": [400, 401, 403, 404, 409, 500, 503],
+  "messages": ["All fields are required.", "Invalid email or password.", "Invalid or expired code. Please try again.", "Article not found", "Failed to fetch latest news"]
+}

@@ -12,6 +12,7 @@ const API_BASE = (() => {
   // Production — use a same-origin relative path (or replace with your deployed API URL)
   return '/api';
 })();
+window.API_BASE = API_BASE;
 
 // ── Token helpers ──
 function getToken() {

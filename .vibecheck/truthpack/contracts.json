@@ -1,0 +1,18 @@
+{
+  "newsArticle": {
+    "id": "string",
+    "title": "string",
+    "desc": "string",
+    "fullContent": "string",
+    "category": "string",
+    "image": "string",
+    "date": "string",
+    "author": "string",
+    "readTime": "string",
+    "sourceUrl": "string|null"
+  },
+  "authSession": {
+    "token": "jwt",
+    "user": { "id": "string", "fullName": "string", "email": "string", "avatar": "string|null" }
+  }
+}

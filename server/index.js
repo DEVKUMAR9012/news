@@ -62,6 +62,7 @@ app.use(express.json());
 // Routes
 app.use('/api/auth', authLimiter, require('./routes/auth'));
 app.use('/api/user', generalLimiter, require('./routes/user'));
+app.use('/api/news', generalLimiter, require('./routes/news'));
 
 // Health check
 app.get('/', (req, res) => {

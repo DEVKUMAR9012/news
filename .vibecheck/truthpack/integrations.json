@@ -1,0 +1,10 @@
+{
+  "integrations": [
+    { "name": "MongoDB", "package": "mongoose" },
+    { "name": "Google OAuth", "package": "google-auth-library" },
+    { "name": "Firebase Web SDK", "package": "firebase" },
+    { "name": "Nodemailer", "package": "nodemailer" },
+    { "name": "Resend", "package": "resend" },
+    { "name": "GNews", "env": "GNEWS_API_KEY" }
+  ]
+}

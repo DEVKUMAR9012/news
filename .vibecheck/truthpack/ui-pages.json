@@ -1,0 +1,12 @@
+{
+  "pages": [
+    { "route": "/", "file": "index.html" },
+    { "route": "/pages/article.html", "file": "pages/article.html" },
+    { "route": "/pages/category.html", "file": "pages/category.html" },
+    { "route": "/pages/login.html", "file": "pages/login.html" },
+    { "route": "/pages/signup.html", "file": "pages/signup.html" },
+    { "route": "/pages/profile.html", "file": "pages/profile.html", "auth": true },
+    { "route": "/pages/forgot-password.html", "file": "pages/forgot-password.html" },
+    { "route": "/pages/verify-otp.html", "file": "pages/verify-otp.html" }
+  ]
+}

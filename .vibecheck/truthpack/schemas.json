@@ -1,0 +1,6 @@
+{
+  "mongooseModels": {
+    "User": ["fullName", "email", "password", "googleId", "avatar", "isVerified", "verificationToken", "verificationExpires", "resetPasswordToken", "resetPasswordExpires", "savedArticles", "createdAt"],
+    "News": ["title", "desc", "fullContent", "category", "image", "date", "author", "readTime", "sourceUrl", "sourceName", "publishedAt"]
+  }
+}

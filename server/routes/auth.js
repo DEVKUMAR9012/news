@@ -102,6 +102,31 @@ router.post('/verify-otp', async (req, res) => {
 // ─────────────────────────────────────────
 // POST /api/auth/resend-verification
 // ─────────────────────────────────────────
+router.get('/verify/:token', async (req, res) => {
+  try {
+    const { token } = req.params;
+
+    const user = await User.findOne({
+      verificationToken: token,
+      verificationExpires: { $gt: Date.now() }
+    });
+
+    if (!user) {
+      return res.status(400).json({ message: 'Invalid or expired verification link.' });
+    }
+
+    user.isVerified = true;
+    user.verificationToken = undefined;
+    user.verificationExpires = undefined;
+    await user.save();
+
+    res.json({ message: 'Email verified successfully! You can now log in.' });
+  } catch (error) {
+    console.error('Verify link error:', error);
+    res.status(500).json({ message: 'Server error. Please try again.' });
+  }
+});
+
 router.post('/resend-verification', async (req, res) => {
   try {
     const { email } = req.body;

@@ -1,0 +1,10 @@
+{
+  "commands": [
+    { "command": "npm start", "cwd": ".", "description": "Start backend API through the root script" },
+    { "command": "npm run dev", "cwd": ".", "description": "Start backend API with nodemon through the root script" },
+    { "command": "npm run check", "cwd": ".", "description": "Run server JavaScript syntax checks" },
+    { "command": "npm start", "cwd": "server", "description": "Start Express API" },
+    { "command": "npm run dev", "cwd": "server", "description": "Start Express API with nodemon" },
+    { "command": "npm run check", "cwd": "server", "description": "Run server JavaScript syntax checks" }
+  ]
+}

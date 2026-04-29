@@ -1,0 +1,29 @@
+{
+  "project": "Daily News Digest",
+  "packages": [
+    {
+      "name": "dada",
+      "path": ".",
+      "type": "static-frontend",
+      "entryPoints": ["index.html", "pages/*.html"],
+      "scripts": {
+        "start": "npm --prefix server start",
+        "dev": "npm --prefix server run dev",
+        "check": "npm --prefix server run check"
+      },
+      "dependencies": ["firebase"]
+    },
+    {
+      "name": "daily-news-digest-server",
+      "path": "server",
+      "type": "express-api",
+      "entryPoints": ["server/index.js"],
+      "scripts": {
+        "start": "node index.js",
+        "dev": "nodemon index.js",
+        "check": "node --check index.js && node --check config/db.js && node --check middleware/authMiddleware.js && node --check models/User.js && node --check models/News.js && node --check routes/auth.js && node --check routes/user.js && node --check routes/news.js && node --check services/newsService.js && node --check utils/sendEmail.js"
+      },
+      "dependencies": ["axios", "bcryptjs", "cors", "dotenv", "express", "express-rate-limit", "google-auth-library", "helmet", "jsonwebtoken", "mongoose", "morgan", "node-cache", "nodemailer", "resend"]
+    }
+  ]
+}

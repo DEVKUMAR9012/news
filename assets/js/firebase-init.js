@@ -52,34 +52,12 @@ setTimeout(() => {
 }, 50);
 
 onAuthStateChanged(auth, (user) => {
-  const path = window.location.pathname;
-  let filename = path.split('/').pop() || 'index.html';
-  if (path.endsWith('/')) {
-    filename = 'index.html';
+  // Express/JWT auth in auth.js is the primary app session. Firebase is
+  // optional; do not redirect public pages based on Firebase state.
+  if (user) {
+    updateUIWithUser(user);
   }
-  
-  const isAuthView = filename === 'login.html' || filename === 'signup.html';
-  const inPagesFolder = path.includes('/pages/');
-  
-  // ── Check localStorage token as fallback (faster than Firebase)
-  const savedToken = localStorage.getItem('dnd_token');
-  const isLoggedInLocally = !!savedToken;
-  
-  // PRIORITY: Firebase state > localStorage state
-  const isAuthenticated = user || isLoggedInLocally;
-  
-  if (!isAuthenticated && !isAuthView) {
-    // User is not logged in and trying to view protected page
-    const redirectPath = inPagesFolder ? 'login.html' : 'pages/login.html';
-    window.location.replace(redirectPath);
-  } else if (isAuthenticated && !isAuthView) {
-    // User is logged in: Update UI
-    if (user) {
-      updateUIWithUser(user);
-    }
-  }
-  
-  // Mark that auth state has settled
+
   authStateLoaded = true;
 });
 
