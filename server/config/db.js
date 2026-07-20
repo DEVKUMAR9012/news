@@ -1,11 +1,20 @@
 const mongoose = require('mongoose');
+const { MongoMemoryServer } = require('mongodb-memory-server');
 
 let isConnected = false;
 
 const connectDB = async () => {
   try {
+    let mongoUri = process.env.MONGO_URI;
+    
+    if (mongoUri === 'memory') {
+      const mongoServer = await MongoMemoryServer.create();
+      mongoUri = mongoServer.getUri();
+      console.log(`✅ MongoDB Memory Server Started`);
+    }
+
     // Set socket timeout to 5 seconds for faster failure
-    const conn = await mongoose.connect(process.env.MONGO_URI, { 
+    const conn = await mongoose.connect(mongoUri, { 
       serverSelectionTimeoutMS: 3000,
       socketTimeoutMS: 3000,
       connectTimeoutMS: 3000,

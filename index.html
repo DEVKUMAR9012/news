@@ -158,29 +158,7 @@
   <script src="assets/js/config.js"></script>
   <script src="assets/js/script.js"></script>
   <script>
-    // Update hero section with first article's data
-    function updateHeroSection() {
-      // Note: newsData is defined in script.js
-      if (typeof newsData !== 'undefined' && newsData.length > 0) {
-        const firstArticle = newsData[0];
-        const heroTitle = document.getElementById('heroTitle');
-        const heroDesc = document.getElementById('heroDesc');
-        const heroImage = document.getElementById('heroImage');
-        const heroCard = document.getElementById('heroCard');
-        
-        if (heroTitle) heroTitle.textContent = firstArticle.title;
-        if (heroDesc) heroDesc.textContent = firstArticle.desc;
-        if (heroImage) heroImage.src = firstArticle.image.replace('400/250', '1200/600') || firstArticle.image;
-        if (heroCard) heroCard.onclick = () => window.location.href = `pages/article.html?id=${firstArticle.id}`;
-      }
-    }
-    
-    // Call after DOM is ready
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', updateHeroSection);
-    } else {
-      updateHeroSection();
-    }
+    // Hero section is now dynamically updated in script.js with a 3-second carousel
     
     // Hide loading indicator after auth state is checked
     setTimeout(() => {

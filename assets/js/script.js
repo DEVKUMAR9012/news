@@ -441,6 +441,9 @@ document.addEventListener('DOMContentLoaded', () => {
       renderNewsCards(newsData);
       initBreakingTicker();
       setupTrendingList();
+      if (document.getElementById('heroCard')) {
+        startHeroCarousel();
+      }
     } catch (e) {
       console.error(e);
       newsGrid.innerHTML = '<p style="grid-column:1/-1;text-align:center;">Failed to load news.</p>';
@@ -466,6 +469,43 @@ document.addEventListener('DOMContentLoaded', () => {
         window.location.href = `pages/category.html?cat=${encodeURIComponent(category)}`;
       });
     });
+  }
+
+  let heroCarouselInterval;
+  let currentHeroIndex = 0;
+
+  function startHeroCarousel() {
+    if (!newsData || newsData.length === 0) return;
+    
+    const heroTitle = document.getElementById('heroTitle');
+    const heroDesc = document.getElementById('heroDesc');
+    const heroImage = document.getElementById('heroImage');
+    const heroCard = document.getElementById('heroCard');
+    
+    if (!heroCard) return;
+
+    function updateHero() {
+      const article = newsData[currentHeroIndex];
+      if (!article) return;
+      
+      heroCard.style.opacity = '0.7';
+      setTimeout(() => {
+        if (heroTitle) heroTitle.textContent = article.title;
+        if (heroDesc) heroDesc.textContent = article.desc;
+        if (heroImage) heroImage.src = (article.image || '').replace('400/250', '1200/600') || article.image;
+        if (heroCard) heroCard.onclick = () => window.location.href = `pages/article.html?id=${article.id}`;
+        
+        heroCard.style.opacity = '1';
+        heroCard.style.transition = 'opacity 0.4s ease-in-out';
+      }, 200);
+      
+      currentHeroIndex = (currentHeroIndex + 1) % Math.min(newsData.length, 5); // Cycle through top 5
+    }
+
+    updateHero();
+
+    if (heroCarouselInterval) clearInterval(heroCarouselInterval);
+    heroCarouselInterval = setInterval(updateHero, 3000);
   }
 
   function initBreakingTicker() {
