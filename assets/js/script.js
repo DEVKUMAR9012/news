@@ -9,7 +9,8 @@ document.addEventListener('DOMContentLoaded', () => {
     if (host === 'localhost' || host === '127.0.0.1') {
       return `http://${host}:5000/api`;
     }
-    return '/api';
+    // Production: use Render backend directly
+    return 'https://news-cm6b.onrender.com/api';
   })();
   const API_BASE = `${API_ROOT}/news`;
 
