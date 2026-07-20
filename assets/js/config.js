@@ -4,7 +4,7 @@
 // Example: 'https://daily-news-digest.onrender.com'
 // ============================================================
 (function () {
-  const RENDER_BACKEND_URL = 'https://news-cn6b.onrender.com'; // <-- paste your Render URL here
+  const RENDER_BACKEND_URL = 'https://news-cm6b.onrender.com'; // <-- paste your Render URL here
 
   const host = window.location.hostname;
   const isLocal = host === 'localhost' || host === '127.0.0.1';
